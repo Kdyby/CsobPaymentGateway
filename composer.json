@@ -24,6 +24,9 @@
 	"autoload": {
 		"psr-4": {
 			"Kdyby\\CsobClient\\": "src/"
-		}
+		},
+		"classmap": [
+			"src/exceptions.php"
+		]
 	}
 }
