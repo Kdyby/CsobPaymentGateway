@@ -17,6 +17,7 @@
 		"issues": "https://github.com/kdyby/csob-client/issues"
 	},
 	"require": {
+		"bitbang/http": "^0.1"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
