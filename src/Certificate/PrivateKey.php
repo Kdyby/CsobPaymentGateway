@@ -18,7 +18,6 @@ use Kdyby\CsobClient\SigningException;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
- * @see https://iplatebnibrana.csob.cz/keygen/
  */
 class PrivateKey
 {

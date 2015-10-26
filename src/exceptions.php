@@ -17,10 +17,18 @@ interface Exception
 
 
 
+class InvalidArgumentException extends \InvalidArgumentException implements Exception
+{
+
+}
+
+
+
 class SigningException extends \RuntimeException implements Exception
 {
 
 }
+
 
 
 class MissingExtensionException extends \RuntimeException implements Exception
@@ -32,5 +40,42 @@ class MissingExtensionException extends \RuntimeException implements Exception
 
 class IOException extends \RuntimeException implements Exception
 {
+
+}
+
+
+
+class HttpClientException extends \RuntimeException implements Exception
+{
+
+}
+
+
+
+class PaymentApiException extends \RuntimeException implements Exception
+{
+
+	const OK = 0; // operace proběhla korektně, transakce založena, stav aktualizován apod
+	const MISSING_PARAMETER = 100; // {name} chybějící povinný parametr
+	const INVALID_PARAMETER = 110; // {name} chybný formát parametru
+	const MERCHANT_BLOCKED = 120; // obchodnik nemá povoleny platby
+	const SESSION_EXPIRED = 130; // vypršela platnost požadavku
+	const PAYMENT_NOT_FOUND = 140; // platba nenalezena
+	const PAYMENT_NOT_IN_VALID_STATE = 150; // nesprávný stav platby, operaci nelze provést
+	const CUSTOMER_NOT_FOUND = 800; // zákazník identifikovaný pomocí customerId nenalezen
+	const CUSTOMER_HAS_NO_SAVED_CARDS = 810;
+	const CUSTOMER_FOUND_SAVED_CARDS = 820;
+	const INTERNAL_ERROR = 900; // interní chyba ve zpracování požadavku
+
+
+
+	/**
+	 * @param array $response
+	 * @return PaymentApiException
+	 */
+	public static function fromResponse(array $response)
+	{
+		return new static($response['resultMessage'], (int) $response['resultCode']);
+	}
 
 }

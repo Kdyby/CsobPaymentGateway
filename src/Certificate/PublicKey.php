@@ -18,7 +18,6 @@ use Kdyby\CsobClient\SigningException;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
- * @see https://iplatebnibrana.csob.cz/keygen/
  */
 class PublicKey
 {
@@ -58,7 +57,7 @@ class PublicKey
 		openssl_free_key($publicKeyId);
 
 		if ($res == -1) {
-			throw new SigningException(sprintf('Verification of signature failed: %s', openssl_error_string()));
+			throw new SigningException(sprintf('Verification of signature "%s" failed: %s', $text, openssl_error_string()));
 		}
 
 		return $res == 1;
