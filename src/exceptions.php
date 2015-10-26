@@ -67,15 +67,23 @@ class PaymentApiException extends \RuntimeException implements Exception
 	const CUSTOMER_FOUND_SAVED_CARDS = 820;
 	const INTERNAL_ERROR = 900; // interní chyba ve zpracování požadavku
 
+	/**
+	 * @var Message\Response
+	 */
+	private $response;
+
 
 
 	/**
-	 * @param array $response
+	 * @param array $data
+	 * @param Message\Response $response
 	 * @return PaymentApiException
 	 */
-	public static function fromResponse(array $response)
+	public static function fromResponse(array $data, Message\Response $response)
 	{
-		return new static($response['resultMessage'], (int) $response['resultCode']);
+		$e = new static($data['resultMessage'], (int) $data['resultCode']);
+		$e->response = $response;
+		return $e;
 	}
 
 }

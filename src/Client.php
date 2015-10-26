@@ -198,18 +198,20 @@ class Client
 		}
 
 		if (!isset($decoded['resultCode'])) {
-			throw new HttpClientException(sprintf('The resultCode key was not found in %s', $responseBody));
+			throw new HttpClientException(sprintf('The "resultCode" key is missing in response %s', $responseBody));
 		}
 
+		$response = Message\Response::createWithRequest($decoded, $request);
+
 		if ($decoded['resultCode'] !== PaymentApiException::OK) {
-			throw PaymentApiException::fromResponse($decoded);
+			throw PaymentApiException::fromResponse($decoded, $response);
 		}
 
 		if (empty($decoded['signature'])) {
-			throw new \RuntimeException('Result does not contain signature.');
+			throw new HttpClientException(sprintf('The "signature" key is missing or empty in response %s', $responseBody));
 		}
 
-		return Message\Response::createWithRequest($decoded, $request)->verify($this->config->getPublicKey());
+		return $response->verify($this->config->getPublicKey());
 	}
 
 
