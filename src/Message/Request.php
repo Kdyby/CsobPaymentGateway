@@ -49,15 +49,21 @@ class Request
 	 */
 	private $responseVerifyOrder;
 
+	/**
+	 * @var array
+	 */
+	private $requestSignatureOrder;
 
 
-	public function __construct($method, $endpoint, array $data, array $urlParams = [], array $responseVerifyOrder = [])
+
+	public function __construct($method, $endpoint, array $data, array $urlParams = [], array $responseVerifyOrder = [], array $requestSignatureOrder = [])
 	{
 		$this->method = $method;
 		$this->endpoint = $endpoint;
 		$this->data = $data;
 		$this->urlParams = $urlParams;
 		$this->responseVerifyOrder = $responseVerifyOrder;
+		$this->requestSignatureOrder = $requestSignatureOrder;
 	}
 
 
@@ -95,6 +101,16 @@ class Request
 	/**
 	 * @return array
 	 */
+	public function toArray()
+	{
+		return $this->data;
+	}
+
+
+
+	/**
+	 * @return array
+	 */
 	public function getUrlParams()
 	{
 		return $this->urlParams;
@@ -105,9 +121,19 @@ class Request
 	/**
 	 * @return array
 	 */
-	public function toArray()
+	public function getResponseVerifyKeysOrder()
 	{
-		return $this->data;
+		return $this->responseVerifyOrder;
+	}
+
+
+
+	/**
+	 * @return array
+	 */
+	public function getRequestSignatureKeysOrder()
+	{
+		return $this->requestSignatureOrder;
 	}
 
 
