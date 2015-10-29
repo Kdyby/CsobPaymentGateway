@@ -153,7 +153,7 @@ class Client
 		];
 		$data['signature'] = $this->simpleSign($data);
 
-		return new Message\RedirectResponse($this->buildUrl('payment/process', $data, ['merchantId', 'payId', 'dttm', 'signature']));
+		return new Message\RedirectResponse($this->buildUrl('payment/process/:merchantId/:payId/:dttm/:signature', $data));
 	}
 
 
@@ -357,7 +357,7 @@ class Client
 			$data['signature'] = $this->simpleSign($data);
 		}
 
-		$url = $this->buildUrl($request->getEndpoint(), $data, $request->getUrlParams());
+		$url = $this->buildUrl($request->getEndpoint(), $data);
 
 		$headers = [
 			'Content-Type' => 'application/json',
@@ -374,22 +374,18 @@ class Client
 	/**
 	 * @param $endpoint
 	 * @param array $data
-	 * @param array $urlParams
 	 * @return string
 	 */
-	protected function buildUrl($endpoint, array $data, array $urlParams = [])
+	protected function buildUrl($endpoint, array $data)
 	{
-		$url = $this->config->getUrl() . '/' . $endpoint;
-
-		foreach ($urlParams as $key) {
-			if (empty($data[$key])) {
-				throw new InvalidArgumentException(sprintF('Missing key %s for the assembly of url', $key));
+		$endpoint = preg_replace_callback('~\\:(?P<name>[a-z0-9]+)~i', function ($m) use ($data) {
+			if (empty($data[$m['name']])) {
+				throw new InvalidArgumentException(sprintF('Missing key %s for the assembly of url', $m['name']));
 			}
+			return urlencode($data[$m['name']]);
+		}, $endpoint);
 
-			$url .= '/' . urlencode($data[$key]);
-		}
-
-		return $url;
+		return $this->config->getUrl() . '/' . $endpoint;
 	}
 
 

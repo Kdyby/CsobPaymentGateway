@@ -42,11 +42,6 @@ class Request
 	/**
 	 * @var array
 	 */
-	private $urlParams;
-
-	/**
-	 * @var array
-	 */
 	private $responseVerifyOrder;
 
 	/**
@@ -56,12 +51,11 @@ class Request
 
 
 
-	public function __construct($method, $endpoint, array $data, array $urlParams = [], array $responseVerifyOrder = [], array $requestSignatureOrder = [])
+	public function __construct($method, $endpoint, array $data, array $responseVerifyOrder = [], array $requestSignatureOrder = [])
 	{
 		$this->method = $method;
 		$this->endpoint = $endpoint;
 		$this->data = $data;
-		$this->urlParams = $urlParams;
 		$this->responseVerifyOrder = $responseVerifyOrder;
 		$this->requestSignatureOrder = $requestSignatureOrder;
 	}
@@ -111,16 +105,6 @@ class Request
 	/**
 	 * @return array
 	 */
-	public function getUrlParams()
-	{
-		return $this->urlParams;
-	}
-
-
-
-	/**
-	 * @return array
-	 */
 	public function getResponseVerifyKeysOrder()
 	{
 		return $this->responseVerifyOrder;
@@ -148,8 +132,7 @@ class Request
 			self::POST,
 			'payment/init',
 			$data,
-			[],
-			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode'],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken'],
 			[
 				'merchantId',
 				'orderNo',
@@ -180,9 +163,8 @@ class Request
 	{
 		return new static(
 			self::GET,
-			'payment/status',
+			'payment/status/:merchantId/:payId/:dttm/:signature',
 			$data,
-			['merchantId', 'payId', 'dttm', 'signature'],
 			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
 		);
 	}
@@ -197,9 +179,8 @@ class Request
 	{
 		return new static(
 			self::PUT,
-			'payment/reverse',
+			'payment/reverse/:merchantId/:payId/:dttm/:signature',
 			$data,
-			['merchantId', 'payId', 'dttm', 'signature'],
 			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
 		);
 	}
@@ -214,9 +195,8 @@ class Request
 	{
 		return new static(
 			self::PUT,
-			'payment/close',
+			'payment/close/:merchantId/:payId/:dttm/:signature',
 			$data,
-			['merchantId', 'payId', 'dttm', 'signature'],
 			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
 		);
 	}
@@ -231,9 +211,8 @@ class Request
 	{
 		return new static(
 			self::PUT,
-			'payment/refund',
+			'payment/refund/:merchantId/:payId/:dttm/:signature',
 			$data,
-			['merchantId', 'payId', 'dttm', 'signature'],
 			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
 		);
 	}
@@ -259,9 +238,8 @@ class Request
 	{
 		return new static(
 			self::GET,
-			'customer/info',
+			'customer/info/:merchantId/:customerId/:dttm/:signature',
 			$data,
-			['merchantId', 'customerId', 'dttm', 'signature'],
 			['customerId', 'dttm', 'resultCode', 'resultMessage']
 		);
 	}
