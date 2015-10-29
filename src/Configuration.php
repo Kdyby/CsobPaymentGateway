@@ -43,30 +43,16 @@ class Configuration
 	 */
 	private $shopName;
 
-	/**
-	 * @var PrivateKey
-	 */
-	private $privateKey;
-
-	/**
-	 * @var PublicKey
-	 */
-	private $publicKey;
-
 
 
 	/**
 	 * @param string $merchantId
 	 * @param string $shopName
-	 * @param PrivateKey $privateKey
-	 * @param PublicKey $publicKey
 	 */
-	public function __construct($merchantId, $shopName, PrivateKey $privateKey, PublicKey $publicKey)
+	public function __construct($merchantId, $shopName)
 	{
 		$this->merchantId = $merchantId;
 		$this->shopName = $shopName;
-		$this->privateKey = $privateKey;
-		$this->publicKey = $publicKey;
 	}
 
 
@@ -97,26 +83,6 @@ class Configuration
 	public function getShopName()
 	{
 		return $this->shopName;
-	}
-
-
-
-	/**
-	 * @return PrivateKey
-	 */
-	public function getPrivateKey()
-	{
-		return $this->privateKey;
-	}
-
-
-
-	/**
-	 * @return PublicKey
-	 */
-	public function getPublicKey()
-	{
-		return $this->publicKey;
 	}
 
 

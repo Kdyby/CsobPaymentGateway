@@ -11,6 +11,8 @@
 namespace Kdyby\CsobClient;
 
 use Bitbang\Http;
+use Kdyby\CsobClient\Certificate\PrivateKey;
+use Kdyby\CsobClient\Certificate\PublicKey;
 use Psr\Log\LoggerInterface;
 
 
@@ -27,6 +29,16 @@ class Client
 	private $config;
 
 	/**
+	 * @var PrivateKey
+	 */
+	private $privateKey;
+
+	/**
+	 * @var PublicKey
+	 */
+	private $publicKey;
+
+	/**
 	 * @var Http\IClient
 	 */
 	private $httpClient;
@@ -38,9 +50,11 @@ class Client
 
 
 
-	public function __construct(Configuration $config, Http\IClient $httpClient)
+	public function __construct(Configuration $config, PrivateKey $privateKey, PublicKey $publicKey, Http\IClient $httpClient)
 	{
 		$this->config = $config;
+		$this->privateKey = $privateKey;
+		$this->publicKey = $publicKey;
 		$this->httpClient = $httpClient;
 	}
 
@@ -173,7 +187,7 @@ class Client
 		];
 		$data += array_fill_keys($expectedData, NULL);
 
-		return Message\Response::fromArray($data, $expectedData)->verify($this->config->getPublicKey());
+		return Message\Response::createFromArray($data, $expectedData)->verify($this->publicKey);
 	}
 
 
@@ -211,7 +225,7 @@ class Client
 			throw new HttpClientException(sprintf('The "signature" key is missing or empty in response %s', $responseBody));
 		}
 
-		return $response->verify($this->config->getPublicKey());
+		return $response->verify($this->publicKey);
 	}
 
 
@@ -267,8 +281,7 @@ class Client
 	 */
 	protected function simpleSign(array $data)
 	{
-		$privateKey = $this->config->getPrivateKey();
-		return $privateKey->sign(Helpers::arrayToSignatureString($data));
+		return $this->privateKey->sign(Helpers::arrayToSignatureString($data));
 	}
 
 
