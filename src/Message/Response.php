@@ -166,7 +166,7 @@ class Response
 	 * @param array $verifyKeysOrder
 	 * @return Response
 	 */
-	public static function fromArray(array $decoded, array $verifyKeysOrder = [])
+	public static function createFromArray(array $decoded, array $verifyKeysOrder = [])
 	{
 		return new static($decoded, NULL, $verifyKeysOrder);
 	}
