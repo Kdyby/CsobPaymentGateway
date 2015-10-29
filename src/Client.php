@@ -23,6 +23,8 @@ use Psr\Log\LoggerInterface;
 class Client
 {
 
+	const DTTM_FORMAT = 'YmdHis';
+
 	/**
 	 * @var Configuration
 	 */
@@ -291,7 +293,7 @@ class Client
 	 */
 	protected function formatDatetime()
 	{
-		return date('YmdHis');
+		return date(self::DTTM_FORMAT);
 	}
 
 }
