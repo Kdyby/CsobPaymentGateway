@@ -106,7 +106,7 @@ class Payment
 	 *
 	 * @var bool
 	 */
-	private $closePayment = FALSE;
+	private $closePayment = TRUE;
 
 	/**
 	 * URL adresa, na kterou bude klient přesměrován zpět do e-shopu po dokončení platby. Maximální délka 300 znaků.
