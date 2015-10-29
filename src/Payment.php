@@ -113,6 +113,7 @@ class Payment
 	 * Metoda návratu na URL adresu e-shopu.
 	 * Povolené hodnoty POST, GET.
 	 * Doporučená metoda je POST.
+	 *
 	 * @var string
 	 */
 	private $returnMethod = Message\Request::POST;
@@ -120,6 +121,7 @@ class Payment
 	/**
 	 * Seznam položek nákupu, který bude zobrazen na platební bráně.
 	 * Obsahuje položky Item.
+	 *
 	 * @var array
 	 */
 	private $cart = [];
@@ -128,6 +130,7 @@ class Payment
 	 * Stručný popis nákupu pro 3DS stránku:
 	 * V případě ověření klienta na straně vydavatelské banky nelze zobrazit detail košíku jako na platební bráně.
 	 * Do banky se proto posílá tento stručný popis nákupu. Maximální délka 255 znaků.
+	 *
 	 * @var string
 	 */
 	private $description;
@@ -136,6 +139,7 @@ class Payment
 	 * Libovolná pomocná data, která budou vrácena ve zpětném redirectu z platební brány na stránku obchodníka.
 	 * Mohou sloužit např pro udržení kontinuity procesu na e-shopu, musí být kódována v BASE64.
 	 * Maximální délka po zakódování 255 znaků.
+	 *
 	 * @var string
 	 */
 	private $merchantData;
@@ -143,6 +147,7 @@ class Payment
 	/**
 	 * Jednoznačné ID zákazníka, který přiděluje e-shop. Maximální délka 50 znaků.
 	 * Používá se při uložení karty a jejím následném použití při další návštěvě tohoto e-shopu
+	 *
 	 * @var string
 	 */
 	private $customerId;
@@ -151,6 +156,7 @@ class Payment
 	 * Preferovaná jazyková mutace, která se zobrazí zákazníkovi na platební bráně.
 	 * Defaultně je mutace česká.
 	 * Povolené hodnoty: self::LANGUAGE_*
+	 *
 	 * @var string
 	 */
 	private $language = self::LANGUAGE_CZ;
