@@ -144,7 +144,30 @@ class Request
 	 */
 	public static function paymentInit(array $data)
 	{
-		return new static(self::POST, 'payment/init', $data, []);
+		return new static(
+			self::POST,
+			'payment/init',
+			$data,
+			[],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode'],
+			[
+				'merchantId',
+				'orderNo',
+				'dttm',
+				'payOperation',
+				'payMethod',
+				'totalAmount',
+				'currency',
+				'closePayment',
+				'returnUrl',
+				'returnMethod',
+				'cart',
+				'description',
+				'merchantData',
+				'customerId',
+				'language'
+			]
+		);
 	}
 
 
@@ -155,7 +178,13 @@ class Request
 	 */
 	public static function paymentStatus(array $data)
 	{
-		return new static(self::GET, 'payment/status', $data, ['merchantId', 'payId', 'dttm', 'signature']);
+		return new static(
+			self::GET,
+			'payment/status',
+			$data,
+			['merchantId', 'payId', 'dttm', 'signature'],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
+		);
 	}
 
 
@@ -166,7 +195,13 @@ class Request
 	 */
 	public static function paymentReverse(array $data)
 	{
-		return new static(self::PUT, 'payment/reverse', $data, ['merchantId', 'payId', 'dttm', 'signature']);
+		return new static(
+			self::PUT,
+			'payment/reverse',
+			$data,
+			['merchantId', 'payId', 'dttm', 'signature'],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
+		);
 	}
 
 
@@ -177,7 +212,13 @@ class Request
 	 */
 	public static function paymentClose(array $data)
 	{
-		return new static(self::PUT, 'payment/close', $data, ['merchantId', 'payId', 'dttm', 'signature']);
+		return new static(
+			self::PUT,
+			'payment/close',
+			$data,
+			['merchantId', 'payId', 'dttm', 'signature'],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
+		);
 	}
 
 
@@ -188,7 +229,13 @@ class Request
 	 */
 	public static function paymentRefund(array $data)
 	{
-		return new static(self::PUT, 'payment/refund', $data, ['merchantId', 'payId', 'dttm', 'signature']);
+		return new static(
+			self::PUT,
+			'payment/refund',
+			$data,
+			['merchantId', 'payId', 'dttm', 'signature'],
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
+		);
 	}
 
 
@@ -210,7 +257,13 @@ class Request
 	 */
 	public static function customerInfo(array $data)
 	{
-		return new static(self::GET, 'customer/info', $data, ['merchantId', 'customerId', 'dttm', 'signature']);
+		return new static(
+			self::GET,
+			'customer/info',
+			$data,
+			['merchantId', 'customerId', 'dttm', 'signature'],
+			['customerId', 'dttm', 'resultCode', 'resultMessage']
+		);
 	}
 
 }
