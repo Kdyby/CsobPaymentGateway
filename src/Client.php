@@ -103,9 +103,36 @@ class Client
 
 
 
-	public function paymentInit()
+	/**
+	 * Api call for payment/init
+	 *
+	 * @param Payment $payment
+	 * @return Message\Response
+	 */
+	public function paymentInit(Payment $payment)
 	{
+		$data = $payment->toArray();
+		$signatureString = Helpers::arrayToSignatureString($data, [
+			'merchantId',
+			'orderNo',
+			'dttm',
+			'payOperation',
+			'payMethod',
+			'totalAmount',
+			'currency',
+			'closePayment',
+			'returnUrl',
+			'returnMethod',
+			'cart',
+			'description',
+			'merchantData',
+			'customerId',
+			'language'
+		]);
 
+		$data['signature'] = $this->privateKey->sign($signatureString);
+
+		return $this->sendRequest(Message\Request::paymentInit($data));
 	}
 
 
