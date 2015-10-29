@@ -57,6 +57,12 @@ class Payment
 	private $orderNo;
 
 	/**
+	 * payID dříve vytvořené šablony pro opakovanou platbu
+	 * @var string
+	 */
+	private $origPayId;
+
+	/**
 	 * Datum a čas odeslání požadavku ve formátu YYYYMMDDHHMMSS
 	 *
 	 * @var \DateTime
@@ -209,6 +215,28 @@ class Payment
 	public function getOrderNo()
 	{
 		return $this->orderNo;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getOriginalPayId()
+	{
+		return $this->origPayId;
+	}
+
+
+
+	/**
+	 * @param string $origPayId
+	 * @return Payment
+	 */
+	public function setOriginalPayId($origPayId)
+	{
+		$this->origPayId = $origPayId;
+		return $this;
 	}
 
 
@@ -412,9 +440,25 @@ class Payment
 
 	/**
 	 * Returns structure that is required by the API.
+	 *
 	 * @return array
 	 */
 	public function toArray()
+	{
+		if (empty($this->origPayId)) {
+			return $this->toPaymentArray();
+
+		} else {
+			return $this->toRecurrentArray();
+		}
+	}
+
+
+
+	/**
+	 * @return array
+	 */
+	private function toPaymentArray()
 	{
 		if (count($this->cart) < 1) {
 			throw new UnexpectedValueException('The cart must contain at least one item.');
@@ -459,6 +503,40 @@ class Payment
 		}
 
 		$data['language'] = $this->language;
+
+		return $data;
+	}
+
+
+
+	/**
+	 * @return array
+	 */
+	private function toRecurrentArray()
+	{
+		if (empty($this->orderNo)) {
+			throw new UnexpectedValueException('The orderNo is required.');
+		}
+
+		if (empty($this->origPayId)) {
+			throw new UnexpectedValueException('The origPayId is required.');
+		}
+
+		$data = [
+			'merchantId' => $this->merchantId,
+			'origPayId' => $this->origPayId,
+			'orderNo' => $this->orderNo,
+			'dttm' => $this->dttm->format(Client::DTTM_FORMAT),
+		];
+
+		if ($this->totalAmount !== 0) {
+			$data['totalAmount'] = $this->totalAmount;
+			$data['currency'] = $this->currency;
+		}
+
+		if (!empty($this->description)) {
+			$data['description'] = $this->description;
+		}
 
 		return $data;
 	}

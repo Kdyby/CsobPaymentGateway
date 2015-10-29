@@ -112,6 +112,10 @@ class Client
 	 */
 	public function paymentInit(Payment $payment)
 	{
+		if ($payment->getOriginalPayId()) {
+			throw new InvalidArgumentException('You should use paymentRecurrent when origPayId is provided.');
+		}
+
 		$data = $payment->toArray();
 		$signatureString = Helpers::arrayToSignatureString($data, [
 			'merchantId',
@@ -227,16 +231,27 @@ class Client
 
 
 	/**
-	 * @param string $paymentId
+	 * @param Payment $payment
 	 * @return Message\Response
 	 */
-	public function paymentRecurrent($paymentId)
+	public function paymentRecurrent(Payment $payment)
 	{
-		$data = [
-			'merchantId' => $this->config->getMerchantId(),
-			'payId' => $paymentId,
-			'dttm' => $this->formatDatetime(),
-		];
+		if (!$payment->getOriginalPayId()) {
+			throw new InvalidArgumentException('The origPayId is required for recurrent payment.');
+		}
+
+		$data = $payment->toArray();
+		$signatureString = Helpers::arrayToSignatureString($data, [
+			'merchantId',
+			'origPayId',
+			'orderNo',
+			'dttm',
+			'totalAmount',
+			'currency',
+			'description',
+		]);
+
+		$data['signature'] = $this->privateKey->sign($signatureString);
 
 		return $this->sendRequest(Message\Request::paymentRecurrent($data));
 	}

@@ -225,7 +225,12 @@ class Request
 	 */
 	public static function paymentRecurrent(array $data)
 	{
-		return new static(self::POST, 'payment/recurrent', $data, []);
+		return new static(
+			self::POST,
+			'payment/recurrent',
+			$data,
+			['payId', 'dttm', 'resultCode', 'resultMessage', 'paymentStatus', 'authCode', 'cardToken']
+		);
 	}
 
 
