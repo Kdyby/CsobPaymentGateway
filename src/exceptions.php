@@ -24,6 +24,13 @@ class InvalidArgumentException extends \InvalidArgumentException implements Exce
 
 
 
+class UnexpectedValueException extends \UnexpectedValueException implements Exception
+{
+
+}
+
+
+
 class SigningException extends \RuntimeException implements Exception
 {
 
