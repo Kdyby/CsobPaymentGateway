@@ -38,4 +38,14 @@ class RedirectResponse
 		return $this->url;
 	}
 
+
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->url;
+	}
+
 }
