@@ -2,7 +2,7 @@
 	"name": "kdyby/csob-payment-gateway",
 	"type": "library",
 	"description": "CSOB client library",
-	"keywords": ["nette", "kdyby", "csob", "paymentgateway", "card", "payment"],
+	"keywords": ["kdyby", "csob", "paymentgateway", "card", "payment"],
 	"homepage": "http://kdyby.org",
 	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
