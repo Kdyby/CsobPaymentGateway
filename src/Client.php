@@ -288,8 +288,8 @@ class Client
 
 	/**
 	 * @param Message\Request $request
-	 * @throws HttpClientException
-	 * @throws PaymentApiException
+	 * @throws ApiException
+	 * @throws PaymentException
 	 * @return Message\Response
 	 */
 	public function sendRequest(Message\Request $request)
@@ -305,29 +305,55 @@ class Client
 				$httpResponse = $this->httpClient->request($httpRequest);
 
 			} catch (Http\IException $e) {
-				throw new HttpClientException($e->getMessage(), 0, $e);
+				throw new ApiException($e->getMessage(), 0, $e);
+			}
+
+			switch ($httpResponse->getCode()) {
+				case ApiException::S400_BAD_REQUEST:
+				case ApiException::S403_FORBIDDEN:
+				case ApiException::S404_NOT_FOUND:
+					throw new ApiException('Payment is probably in wrong state or request is broken', $httpResponse->getCode());
+				case ApiException::S429_TOO_MANY_REQUESTS:
+					throw new ApiException('Too Many Requests', $httpResponse->getCode());
+				case ApiException::S503_SERVICE_UNAVAILABLE:
+					throw new ApiException('Service is down for maintenance', $httpResponse->getCode());
 			}
 
 			$decoded = @json_decode($responseBody = $httpResponse->getBody(), TRUE);
 			if ($decoded === NULL) {
-				throw new HttpClientException(sprintf('API returned invalid json %s', $responseBody));
+				throw new ApiException(sprintf('API returned invalid json %s', $responseBody), $httpResponse->getCode());
 			}
 
 			if (!isset($decoded['resultCode'])) {
-				throw new HttpClientException(sprintf('The "resultCode" key is missing in response %s', $responseBody));
+				throw new ApiException(sprintf('The "resultCode" key is missing in response %s', $responseBody), $httpResponse->getCode());
 			}
 
 			$response = Message\Response::createWithRequest($decoded, $request);
 
-			if ($decoded['resultCode'] !== PaymentApiException::OK) {
-				throw PaymentApiException::fromResponse($decoded, $response);
+			if ($decoded['resultCode'] === PaymentException::INTERNAL_ERROR) {
+				throw InternalErrorException::fromResponse($decoded, $response);
 			}
 
 			if (empty($decoded['signature'])) {
-				throw new HttpClientException(sprintf('The "signature" key is missing or empty in response %s', $responseBody));
+				throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', $responseBody), $httpResponse->getCode());
 			}
 
 			$response->verify($this->publicKey);
+
+			switch ($decoded['resultCode']) {
+				case PaymentException::MISSING_PARAMETER:
+					throw MissingParameterException::fromResponse($decoded, $response);
+				case PaymentException::INVALID_PARAMETER:
+					throw InvalidParameterException::fromResponse($decoded, $response);
+				case PaymentException::MERCHANT_BLOCKED:
+					throw MerchantBlockedException::fromResponse($decoded, $response);
+				case PaymentException::SESSION_EXPIRED:
+					throw SessionExpiredException::fromResponse($decoded, $response);
+				case PaymentException::PAYMENT_NOT_FOUND:
+					throw PaymentNotFoundException::fromResponse($decoded, $response);
+				case PaymentException::PAYMENT_NOT_IN_VALID_STATE:
+					throw PaymentNotInValidStateException::fromResponse($decoded, $response);
+			}
 
 			foreach ($this->onResponse as $callback) {
 				call_user_func($callback, $response);
@@ -335,7 +361,7 @@ class Client
 
 			return $response;
 
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			foreach ($this->onError as $callback) {
 				call_user_func($callback, $e, $response);
 			}

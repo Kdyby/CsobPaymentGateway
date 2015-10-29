@@ -52,14 +52,21 @@ class IOException extends \RuntimeException implements Exception
 
 
 
-class HttpClientException extends \RuntimeException implements Exception
+class ApiException extends \RuntimeException implements Exception
 {
+
+	const S400_BAD_REQUEST = 400;
+	const S403_FORBIDDEN = 403;
+	const S404_NOT_FOUND = 404;
+	const S405_METHOD_NOT_ALLOWED = 405;
+	const S429_TOO_MANY_REQUESTS = 429;
+	const S503_SERVICE_UNAVAILABLE = 503;
 
 }
 
 
 
-class PaymentApiException extends \RuntimeException implements Exception
+class PaymentException extends \RuntimeException implements Exception
 {
 
 	const OK = 0; // operace proběhla korektně, transakce založena, stav aktualizován apod
@@ -82,9 +89,19 @@ class PaymentApiException extends \RuntimeException implements Exception
 
 
 	/**
+	 * @return Message\Response
+	 */
+	public function getResponse()
+	{
+		return $this->response;
+	}
+
+
+
+	/**
 	 * @param array $data
 	 * @param Message\Response $response
-	 * @return PaymentApiException
+	 * @return PaymentException
 	 */
 	public static function fromResponse(array $data, Message\Response $response)
 	{
@@ -92,5 +109,54 @@ class PaymentApiException extends \RuntimeException implements Exception
 		$e->response = $response;
 		return $e;
 	}
+
+}
+
+
+
+class MissingParameterException extends PaymentException
+{
+
+}
+
+
+
+class InvalidParameterException extends PaymentException
+{
+
+}
+
+
+
+class MerchantBlockedException extends PaymentException
+{
+
+}
+
+
+
+class SessionExpiredException extends PaymentException
+{
+
+}
+
+
+
+class PaymentNotFoundException extends PaymentException
+{
+
+}
+
+
+
+class PaymentNotInValidStateException extends PaymentException
+{
+
+}
+
+
+
+class InternalErrorException extends PaymentException
+{
 
 }
