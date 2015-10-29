@@ -59,11 +59,11 @@ class Response
 
 
 	/**
-	 * @return int
+	 * @return string
 	 */
 	public function getPayId()
 	{
-		return (int) $this->data['payId'];
+		return $this->data['payId'];
 	}
 
 
