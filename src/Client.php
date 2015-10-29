@@ -139,7 +139,7 @@ class Client
 
 	/**
 	 * RedirectResponse factory for payment/process
-	 * @param integer $paymentId
+	 * @param string $paymentId
 	 * @return Message\RedirectResponse
 	 */
 	public function paymentProcess($paymentId)
@@ -156,6 +156,10 @@ class Client
 
 
 
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
 	public function paymentStatus($paymentId)
 	{
 		$data = [
@@ -169,6 +173,10 @@ class Client
 
 
 
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
 	public function paymentReverse($paymentId)
 	{
 		$data = [
@@ -182,6 +190,10 @@ class Client
 
 
 
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
 	public function paymentClose($paymentId)
 	{
 		$data = [
@@ -195,6 +207,10 @@ class Client
 
 
 
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
 	public function paymentRefund($paymentId)
 	{
 		$data = [
@@ -208,6 +224,10 @@ class Client
 
 
 
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
 	public function paymentRecurrent($paymentId)
 	{
 		$data = [
@@ -221,6 +241,10 @@ class Client
 
 
 
+	/**
+	 * @param string $customerId
+	 * @return Message\Response
+	 */
 	public function customerInfo($customerId)
 	{
 		$data = [
@@ -234,6 +258,10 @@ class Client
 
 
 
+	/**
+	 * @param array $data
+	 * @return Message\Response
+	 */
 	public function receiveResponse(array $data)
 	{
 		if (empty($data)) {
@@ -315,6 +343,10 @@ class Client
 
 
 
+	/**
+	 * @param Message\Request $request
+	 * @return Http\Request
+	 */
 	protected function requestToHttpRequest(Message\Request $request)
 	{
 		$data = $request->toArray();
