@@ -89,11 +89,12 @@ class Client
 
 	/**
 	 * This is a factory method, not an api call.
+	 *
 	 * @param integer $orderNo
 	 * @param string $customerId
 	 * @return Payment
 	 */
-	public function createPayment($orderNo, $customerId = NULL)
+	public function createPayment($orderNo = NULL, $customerId = NULL)
 	{
 		$payment = new Payment($this->config->getMerchantId(), $orderNo, $customerId);
 		$payment->setReturnMethod($this->config->getReturnMethod());

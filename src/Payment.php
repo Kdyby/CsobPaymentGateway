@@ -157,20 +157,52 @@ class Payment
 
 
 
-	public function __construct($merchantId, $orderNo, $customerId = NULL)
+	public function __construct($merchantId, $orderNo = NULL, $customerId = NULL)
 	{
 		if (empty($merchantId)) {
 			throw new InvalidArgumentException('The merchantId is required.');
 		}
 
-		if (empty($orderNo) || !is_integer($orderNo) || strlen($orderNo) > 10) {
+		$this->merchantId = $merchantId;
+		$this->setOrderNo($orderNo);
+		$this->setCustomerId($customerId);
+		$this->dttm = new \DateTime();
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getMerchantId()
+	{
+		return $this->merchantId;
+	}
+
+
+
+	/**
+	 * @param string $orderNo
+	 * @return Payment
+	 */
+	public function setOrderNo($orderNo)
+	{
+		if ($orderNo !== NULL && (!is_integer($orderNo) || strlen($orderNo) > 10)) {
 			throw new InvalidArgumentException('The orderNo is required. It should be strictly integer, with maximum length of 10 digits.');
 		}
 
-		$this->merchantId = $merchantId;
 		$this->orderNo = $orderNo;
-		$this->setCustomerId($customerId);
-		$this->dttm = new \DateTime();
+		return $this;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getOrderNo()
+	{
+		return $this->orderNo;
 	}
 
 
@@ -388,6 +420,10 @@ class Payment
 
 		if (empty($this->description)) {
 			throw new UnexpectedValueException('The description is required.');
+		}
+
+		if (empty($this->orderNo)) {
+			throw new UnexpectedValueException('The orderNo is required.');
 		}
 
 		$data = [
