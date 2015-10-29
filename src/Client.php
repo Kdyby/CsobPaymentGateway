@@ -137,6 +137,11 @@ class Client
 
 
 
+	/**
+	 * RedirectResponse factory for payment/process
+	 * @param integer $paymentId
+	 * @return Message\RedirectResponse
+	 */
 	public function paymentProcess($paymentId)
 	{
 		$data = [
@@ -235,7 +240,7 @@ class Client
 			return NULL;
 		}
 
-		static $expectedData = [
+		$data += array_fill_keys([
 			'payId',
 			'dttm',
 			'resultCode',
@@ -244,10 +249,20 @@ class Client
 			'authCode',
 			'merchantData',
 			'signature'
-		];
-		$data += array_fill_keys($expectedData, NULL);
+		], NULL);
 
-		return Message\Response::createFromArray($data, $expectedData)->verify($this->publicKey);
+		$verifyKeys = [
+			'payId',
+			'dttm',
+			'resultCode',
+			'resultMessage',
+			'paymentStatus',
+			'authCode',
+			'merchantData',
+			'cardToken',
+		];
+
+		return Message\Response::createFromArray($data, $verifyKeys)->verify($this->publicKey);
 	}
 
 
