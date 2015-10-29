@@ -25,9 +25,10 @@ class Helpers
 	{
 		$str = '';
 		foreach ($arrayKeys ?: array_keys($data) as $key) {
-			if (!isset($data[$key]) || $data[$key] === NULL) {
-				continue;
+			if (!array_key_exists($key, $data) || $data[$key] === NULL) {
+				continue; // can skip
 			}
+
 			$value = $data[$key];
 			if ($value === TRUE) {
 				$str .= 'true';
@@ -36,7 +37,7 @@ class Helpers
 				$str .= 'false';
 
 			} elseif (is_array($value)) {
-				$str .= self::arrayToSignatureString($value, array_keys($value));
+				$str .= self::arrayToSignatureString($value);
 
 			} else {
 				$str .= (string) $data[$key];
