@@ -21,8 +21,8 @@ use Bitbang\Http;
 class Configuration
 {
 
-	const DEFAULT_PRODUCTION_URL = 'https://api.platebnibrana.csob.cz/api/v1.5';
 	const DEFAULT_SANDBOX_URL = 'https://iapi.iplatebnibrana.csob.cz/api/v1.5';
+	const DEFAULT_PRODUCTION_URL = 'https://api.platebnibrana.csob.cz/api/v1.5';
 
 	CONST DEFAULT_CSOB_SANDBOX_CERT = 'mips_iplatebnibrana.csob.cz.pub';
 	CONST DEFAULT_CSOB_PRODUCTION_CERT = 'mips_platebnibrana.csob.cz.pub';
