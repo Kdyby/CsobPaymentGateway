@@ -5,7 +5,7 @@ require_once __DIR__ . '/../bootstrap.php';
 function paymentLog($string)
 {
 	$line = '[' . date('r') . '] ' . $string . "\n";
-	file_put_contents(__DIR__ . '/log/payment.log', $line, FILE_APPEND | LOCK_EX);
+	file_put_contents(__DIR__ . '/../log/payment.log', $line, FILE_APPEND | LOCK_EX);
 }
 
 try {
