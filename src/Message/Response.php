@@ -121,6 +121,16 @@ class Response
 	/**
 	 * @return string|NULL
 	 */
+	public function getCardToken()
+	{
+		return array_key_exists('cardToken', $this->data) ? $this->data['cardToken'] : NULL;
+	}
+
+
+
+	/**
+	 * @return string|NULL
+	 */
 	public function getMerchantData()
 	{
 		return array_key_exists('merchantData', $this->data) ? base64_decode($this->data['merchantData']) : NULL;
