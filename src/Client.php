@@ -302,7 +302,7 @@ class Client
 
 		foreach ($urlParams as $key) {
 			if (empty($data[$key])) {
-				throw new InvalidArgumentException(sprintF('Missing key %s for the assembly of url'));
+				throw new InvalidArgumentException(sprintF('Missing key %s for the assembly of url', $key));
 			}
 
 			$url .= '/' . urlencode($data[$key]);
