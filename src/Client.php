@@ -355,7 +355,7 @@ class Client
 			$data['signature'] = $this->simpleSign($data);
 		}
 
-		$url = $this->buildUrl($request->getEndpoint(), $data, $request->isMethodGet() ? $request->getUrlParams() : []);
+		$url = $this->buildUrl($request->getEndpoint(), $data, $request->getUrlParams());
 
 		$headers = [
 			'Content-Type' => 'application/json',
