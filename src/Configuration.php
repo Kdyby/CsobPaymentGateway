@@ -154,4 +154,14 @@ class Configuration
 		return $this;
 	}
 
+
+
+	/**
+	 * @return Http\IClient|Http\Clients\AbstractClient
+	 */
+	public static function createDefaultHttpClient()
+	{
+		return new Http\Clients\CurlClient();
+	}
+
 }
