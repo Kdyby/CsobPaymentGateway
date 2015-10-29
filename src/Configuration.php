@@ -10,6 +10,10 @@
 
 namespace Kdyby\CsobPaymentGateway;
 
+use Bitbang\Http;
+
+
+
 /**
  * @author Filip Procházka <filip@prochazka.su>
  * @see https://iplatebnibrana.csob.cz/keygen/
@@ -38,6 +42,16 @@ class Configuration
 	 */
 	private $shopName;
 
+	/**
+	 * @var string
+	 */
+	private $returnUrl;
+
+	/**
+	 * @var string
+	 */
+	private $returnMethod = Message\Request::POST;
+
 
 
 	/**
@@ -63,6 +77,18 @@ class Configuration
 
 
 	/**
+	 * @param string $url
+	 * @return Configuration
+	 */
+	public function setUrl($url)
+	{
+		$this->url = $url;
+		return $this;
+	}
+
+
+
+	/**
 	 * @return string
 	 */
 	public function getMerchantId()
@@ -83,11 +109,49 @@ class Configuration
 
 
 	/**
-	 * @param string $url
+	 * @return string
 	 */
-	public function setUrl($url)
+	public function getReturnUrl()
 	{
-		$this->url = $url;
+		return $this->returnUrl;
+	}
+
+
+
+	/**
+	 * @param string $returnUrl
+	 * @return Configuration
+	 */
+	public function setReturnUrl($returnUrl)
+	{
+		$this->returnUrl = $returnUrl;
+		return $this;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getReturnMethod()
+	{
+		return $this->returnMethod;
+	}
+
+
+
+	/**
+	 * @param string $returnMethod
+	 * @return Configuration
+	 */
+	public function setReturnMethod($returnMethod)
+	{
+		if (!in_array($returnMethod, [Message\Request::GET, Message\Request::POST], TRUE)) {
+			throw new InvalidArgumentException('Only Message\Request::POST or Message\Request::GET constants are allowed');
+		}
+
+		$this->returnMethod = $returnMethod;
+		return $this;
 	}
 
 }
