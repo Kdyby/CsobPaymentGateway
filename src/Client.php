@@ -251,18 +251,7 @@ class Client
 			'signature'
 		], NULL);
 
-		$verifyKeys = [
-			'payId',
-			'dttm',
-			'resultCode',
-			'resultMessage',
-			'paymentStatus',
-			'authCode',
-			'merchantData',
-			'cardToken',
-		];
-
-		return Message\Response::createFromArray($data, $verifyKeys)->verify($this->publicKey);
+		return Message\Response::createFromArray($data)->verify($this->publicKey);
 	}
 
 

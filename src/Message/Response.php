@@ -189,4 +189,24 @@ class Response
 		return new static($decoded, NULL, $verifyKeysOrder);
 	}
 
+
+
+	/**
+	 * @param array $decoded
+	 * @return Response
+	 */
+	public static function createFromInitResponse(array $decoded)
+	{
+		return new static($decoded, NULL, [
+			'payId',
+			'dttm',
+			'resultCode',
+			'resultMessage',
+			'paymentStatus',
+			'authCode',
+			'merchantData',
+			'cardToken',
+		]);
+	}
+
 }
