@@ -36,6 +36,9 @@ class Helpers
 			} elseif ($value === FALSE) {
 				$str .= 'false';
 
+			} elseif ($value instanceof \DateTime) {
+				$str .= $value->format(Client::DTTM_FORMAT);
+
 			} elseif (is_array($value)) {
 				$str .= self::arrayToSignatureString($value);
 
