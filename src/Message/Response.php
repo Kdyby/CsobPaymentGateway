@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\CsobClient\Message;
+namespace Kdyby\CsobPaymentGateway\Message;
 
-use Kdyby\CsobClient\Certificate\PublicKey;
-use Kdyby\CsobClient\Helpers;
-use Kdyby\CsobClient\SigningException;
+use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
+use Kdyby\CsobPaymentGateway\Helpers;
+use Kdyby\CsobPaymentGateway\SigningException;
 
 
 

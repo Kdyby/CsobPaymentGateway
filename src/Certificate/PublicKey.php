@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\CsobClient\Certificate;
+namespace Kdyby\CsobPaymentGateway\Certificate;
 
-use Kdyby\CsobClient\IOException;
-use Kdyby\CsobClient\MissingExtensionException;
-use Kdyby\CsobClient\SigningException;
+use Kdyby\CsobPaymentGateway\IOException;
+use Kdyby\CsobPaymentGateway\MissingExtensionException;
+use Kdyby\CsobPaymentGateway\SigningException;
 
 
 

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
  */
 
-namespace Kdyby\CsobClient\Message;
+namespace Kdyby\CsobPaymentGateway\Message;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>

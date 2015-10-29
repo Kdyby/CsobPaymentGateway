@@ -1,5 +1,5 @@
 {
-	"name": "kdyby/csob-client",
+	"name": "kdyby/csob-payment-gateway",
 	"type": "library",
 	"description": "CSOB client librabry",
 	"keywords": ["nette", "kdyby", "csob", "paymentgateway", "card", "payment"],
@@ -14,7 +14,7 @@
 	],
 	"support": {
 		"email": "filip@prochazka.su",
-		"issues": "https://github.com/kdyby/csob-client/issues"
+		"issues": "https://github.com/Kdyby/CsobPaymentGateway/issues"
 	},
 	"require": {
 		"bitbang/http": "^0.1",
@@ -25,7 +25,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Kdyby\\CsobClient\\": "src/"
+			"Kdyby\\CsobPaymentGateway\\": "src/"
 		},
 		"classmap": [
 			"src/exceptions.php"
