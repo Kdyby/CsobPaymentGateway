@@ -157,6 +157,26 @@ class Configuration
 
 
 	/**
+	 * @return string
+	 */
+	public static function getCsobSandboxCertPath()
+	{
+		return __DIR__ . '/../resources/' . self::DEFAULT_CSOB_SANDBOX_CERT;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public static function getCsobProductionCertPath()
+	{
+		return __DIR__ . '/../resources/' . self::DEFAULT_CSOB_PRODUCTION_CERT;
+	}
+
+
+
+	/**
 	 * @return Http\IClient|Http\Clients\AbstractClient
 	 */
 	public static function createDefaultHttpClient()
