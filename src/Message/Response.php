@@ -174,7 +174,7 @@ class Response
 	 */
 	public static function createWithRequest(array $decoded, Request $request)
 	{
-		return new static($decoded, $request);
+		return new static($decoded, $request, $request->getResponseVerifyKeysOrder());
 	}
 
 
