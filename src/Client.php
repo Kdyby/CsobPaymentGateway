@@ -26,6 +26,21 @@ class Client
 	const DTTM_FORMAT = 'YmdHis';
 
 	/**
+	 * @var array|callable[]|\Closure[]
+	 */
+	public $onRequest = [];
+
+	/**
+	 * @var array|callable[]|\Closure[]
+	 */
+	public $onResponse = [];
+
+	/**
+	 * @var array|callable[]|\Closure[]
+	 */
+	public $onError = [];
+
+	/**
 	 * @var Configuration
 	 */
 	private $config;
@@ -196,38 +211,59 @@ class Client
 
 	/**
 	 * @param Message\Request $request
+	 * @throws HttpClientException
+	 * @throws PaymentApiException
 	 * @return Message\Response
 	 */
 	public function sendRequest(Message\Request $request)
 	{
+		$response = NULL;
 		try {
-			$httpRequest = $this->requestToHttpRequest($request);
-			$httpResponse = $this->httpClient->request($httpRequest);
+			try {
+				$httpRequest = $this->requestToHttpRequest($request);
+				foreach ($this->onRequest as $callback) {
+					call_user_func($callback, $request);
+				}
 
-		} catch (Http\IException $e) {
-			throw new HttpClientException($e->getMessage(), 0, $e);
+				$httpResponse = $this->httpClient->request($httpRequest);
+
+			} catch (Http\IException $e) {
+				throw new HttpClientException($e->getMessage(), 0, $e);
+			}
+
+			$decoded = @json_decode($responseBody = $httpResponse->getBody(), TRUE);
+			if ($decoded === NULL) {
+				throw new HttpClientException(sprintf('API returned invalid json %s', $responseBody));
+			}
+
+			if (!isset($decoded['resultCode'])) {
+				throw new HttpClientException(sprintf('The "resultCode" key is missing in response %s', $responseBody));
+			}
+
+			$response = Message\Response::createWithRequest($decoded, $request);
+
+			if ($decoded['resultCode'] !== PaymentApiException::OK) {
+				throw PaymentApiException::fromResponse($decoded, $response);
+			}
+
+			if (empty($decoded['signature'])) {
+				throw new HttpClientException(sprintf('The "signature" key is missing or empty in response %s', $responseBody));
+			}
+
+			$response->verify($this->publicKey);
+
+			foreach ($this->onResponse as $callback) {
+				call_user_func($callback, $response);
+			}
+
+			return $response;
+
+		} catch (\Exception $e) {
+			foreach ($this->onError as $callback) {
+				call_user_func($callback, $e, $response);
+			}
+			throw $e;
 		}
-
-		$decoded = @json_decode($responseBody = $httpResponse->getBody(), TRUE);
-		if ($decoded === NULL) {
-			throw new HttpClientException(sprintf('API returned invalid json %s', $responseBody));
-		}
-
-		if (!isset($decoded['resultCode'])) {
-			throw new HttpClientException(sprintf('The "resultCode" key is missing in response %s', $responseBody));
-		}
-
-		$response = Message\Response::createWithRequest($decoded, $request);
-
-		if ($decoded['resultCode'] !== PaymentApiException::OK) {
-			throw PaymentApiException::fromResponse($decoded, $response);
-		}
-
-		if (empty($decoded['signature'])) {
-			throw new HttpClientException(sprintf('The "signature" key is missing or empty in response %s', $responseBody));
-		}
-
-		return $response->verify($this->publicKey);
 	}
 
 
