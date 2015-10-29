@@ -428,7 +428,18 @@ class Payment
 
 
 	/**
+	 * @return array
+	 */
+	public function getCartItems()
+	{
+		return $this->cart;
+	}
+
+
+
+	/**
 	 * Returns whole integer in hundredth of currency units.
+	 *
 	 * @return int
 	 */
 	public function getTotalAmount()
