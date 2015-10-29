@@ -150,6 +150,24 @@ class Response
 
 
 	/**
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return [
+			'payId' => $this->getPayId(),
+			'dttm' => $this->getDateTime(),
+			'resultCode' => $this->getResultCode(),
+			'resultMessage' => $this->getResultMessage(),
+			'paymentStatus' => $this->getPaymentStatus(),
+			'authCode' => $this->getAuthCode(),
+			'merchantData' => $this->getMerchantData(),
+		] + $this->data;
+	}
+
+
+
+	/**
 	 * @param array $decoded
 	 * @param Request $request
 	 * @return Response
