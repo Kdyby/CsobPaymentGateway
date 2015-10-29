@@ -6,6 +6,16 @@ $privateKey = new Kdyby\CsobPaymentGateway\Certificate\PrivateKey($privatePath =
 $publicKey = new Kdyby\CsobPaymentGateway\Certificate\PublicKey($publicPath = __DIR__ . '/../keys/rsa_A1029DTmM7.pub');
 
 ?>
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container">
 
 <h2>sign</h2>
 <pre>
@@ -29,3 +39,7 @@ echo 'result is: ' . ($publicKey->verify($text, $signature) ? 'ok' : 'failed') .
 
 ?>
 </pre>
+
+</div>
+</body>
+</html>

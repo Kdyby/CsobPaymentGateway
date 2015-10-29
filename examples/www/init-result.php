@@ -9,6 +9,7 @@ require_once __DIR__ . '/../bootstrap.php';
 </head>
 
 <body>
+<div class="container">
 <h2>preparing payment data ...</h2>
 <pre>
 <?php
@@ -62,5 +63,6 @@ echo formatHttpMessage($lastHttpResponse);
 <br/>
 <a href="index.php">new FORM payment/init</a><br/>
 
+</div>
 </body>
 </html>

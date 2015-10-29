@@ -8,6 +8,7 @@ require_once __DIR__ . '/../bootstrap.php';
 	<link rel="stylesheet" href="bootstrap.min.css">
 </head>
 <body>
+<div class="container">
 
 <h2>payment/<?=htmlspecialchars($_GET['action'])?></h2>
 <?php
@@ -59,5 +60,6 @@ echo formatHttpMessage($lastHttpResponse);
 <br/>
 <a href="index.php">new FORM payment/init</a><br/>
 
+</div>
 </body>
 </html>
