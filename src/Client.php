@@ -265,7 +265,7 @@ class Client
 	public function receiveResponse(array $data)
 	{
 		if (empty($data)) {
-			return NULL;
+			throw new InvalidArgumentException('Expected at least partial response from gateway, nothing was given.');
 		}
 
 		$data += array_fill_keys([
