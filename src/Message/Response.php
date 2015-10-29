@@ -63,7 +63,7 @@ class Response
 	 */
 	public function getPayId()
 	{
-		return $this->data['payId'];
+		return array_key_exists('payId', $this->data) ? $this->data['payId'] : NULL;
 	}
 
 
@@ -83,7 +83,7 @@ class Response
 	 */
 	public function getResultCode()
 	{
-		return (int) $this->data['resultCode'];
+		return array_key_exists('resultCode', $this->data) ? (int) $this->data['resultCode'] : NULL;
 	}
 
 
@@ -93,7 +93,7 @@ class Response
 	 */
 	public function getResultMessage()
 	{
-		return $this->data['resultMessage'];
+		return array_key_exists('resultMessage', $this->data) ? $this->data['resultMessage'] : NULL;
 	}
 
 
@@ -103,7 +103,7 @@ class Response
 	 */
 	public function getPaymentStatus()
 	{
-		return (int) $this->data['paymentStatus'];
+		return array_key_exists('paymentStatus', $this->data) ? (int) $this->data['paymentStatus'] : NULL;
 	}
 
 
