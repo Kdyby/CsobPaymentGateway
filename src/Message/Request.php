@@ -24,21 +24,6 @@ class Request
 	const POST = Http\Request::POST;
 	const PUT = Http\Request::PUT;
 
-	const CURRENCY_CZK = 'CZK';
-	const CURRENCY_EUR = 'EUR';
-	const CURRENCY_USD = 'USD';
-	const CURRENCY_GBP = 'GBP';
-
-	const OPERATION_PAYMENT = 'payment';
-	const OPERATION_PAYMENT_RECURRENT = 'recurrentPayment';
-
-	const PAY_METHOD = 'card';
-
-	const LANGUAGE_CZ = 'CZ';
-	const LANGUAGE_EN = 'EN';
-	const LANGUAGE_DE = 'DE';
-	const LANGUAGE_SK = 'SK';
-
 	/**
 	 * @var string
 	 */
