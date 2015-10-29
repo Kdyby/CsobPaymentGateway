@@ -128,7 +128,7 @@ class Client
 			'description',
 			'merchantData',
 			'customerId',
-			'language'
+			'language',
 		]);
 
 		$data['signature'] = $this->privateKey->sign($signatureString);
@@ -140,6 +140,7 @@ class Client
 
 	/**
 	 * RedirectResponse factory for payment/process
+	 *
 	 * @param string $paymentId
 	 * @return Message\RedirectResponse
 	 */
@@ -277,7 +278,7 @@ class Client
 			'paymentStatus',
 			'authCode',
 			'merchantData',
-			'signature'
+			'signature',
 		], NULL);
 
 		return Message\Response::createFromArray($data)->verify($this->publicKey);
