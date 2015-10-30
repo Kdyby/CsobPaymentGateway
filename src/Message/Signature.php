@@ -82,7 +82,6 @@ class Signature
 
 	/**
 	 * @param array $paymentPriorities
-	 * @return Signature
 	 */
 	public function setPaymentPriorities(array $paymentPriorities)
 	{
@@ -93,7 +92,6 @@ class Signature
 
 	/**
 	 * @param array $responsePriorities
-	 * @return Signature
 	 */
 	public function setResponsePriorities(array $responsePriorities)
 	{

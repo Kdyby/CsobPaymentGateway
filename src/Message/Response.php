@@ -10,8 +10,6 @@
 
 namespace Kdyby\CsobPaymentGateway\Message;
 
-use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
-use Kdyby\CsobPaymentGateway\Helpers;
 use Kdyby\CsobPaymentGateway\SigningException;
 
 
