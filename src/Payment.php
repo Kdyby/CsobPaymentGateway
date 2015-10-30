@@ -242,6 +242,32 @@ class Payment
 
 
 	/**
+	 * @return string
+	 */
+	public function getCurrency()
+	{
+		return $this->currency;
+	}
+
+
+
+	/**
+	 * @param string $currency
+	 * @return Payment
+	 */
+	public function setCurrency($currency)
+	{
+		if (!in_array($currency, [self::CURRENCY_CZK, self::CURRENCY_EUR, self::CURRENCY_GBP, self::CURRENCY_USD], TRUE)) {
+			throw new InvalidArgumentException('Only Payment::CURRENCY_* constants are allowed');
+		}
+
+		$this->currency = $currency;
+		return $this;
+	}
+
+
+
+	/**
 	 * @param \DateTime $dttm
 	 * @return Payment
 	 */
