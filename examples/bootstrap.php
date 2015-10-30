@@ -4,6 +4,7 @@ use Kdyby\CsobPaymentGateway\Certificate\PrivateKey;
 use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
+use Kdyby\CsobPaymentGateway\Message\Signature;
 use Psr\Http;
 
 
@@ -54,8 +55,10 @@ $config = new Configuration('A1029DTmM7', 'Shopping at ...');
 $httpClient = Configuration::createDefaultHttpClient();
 $client = new Client(
 	$config,
-	new PrivateKey(__DIR__ . '/keys/rsa_A1029DTmM7.key', NULL),
-	new PublicKey(__DIR__ . '/../resources/mips_iplatebnibrana.csob.cz.pub'),
+	new Signature(
+		new PrivateKey(__DIR__ . '/keys/rsa_A1029DTmM7.key', NULL),
+		new PublicKey(__DIR__ . '/../resources/mips_iplatebnibrana.csob.cz.pub')
+	),
 	$httpClient
 );
 

@@ -32,18 +32,12 @@ class Response
 	 */
 	private $request;
 
-	/**
-	 * @var array
-	 */
-	private $verifyKeysOrder;
 
 
-
-	public function __construct(array $data, Request $request = NULL, array $verifyKeysOrder = [])
+	public function __construct(array $data, Request $request = NULL)
 	{
 		$this->data = $data;
 		$this->request = $request;
-		$this->verifyKeysOrder = $verifyKeysOrder;
 	}
 
 
@@ -139,18 +133,13 @@ class Response
 
 
 	/**
-	 * @param PublicKey $publicKey
+	 * @param Signature $signature
 	 * @throws SigningException
 	 * @return Response
 	 */
-	public function verify(PublicKey $publicKey)
+	public function verify(Signature $signature)
 	{
-		$response = $this->data;
-		unset($response['signature']);
-
-		$string = Helpers::arrayToSignatureString($response, $this->verifyKeysOrder ?: array_keys($response));
-
-		if ($publicKey->verify($string, $this->data['signature']) !== TRUE) {
+		if ($signature->verifyResponse($this->data, $this->data['signature']) !== TRUE) {
 			throw new SigningException('Result signature is incorrect.');
 		}
 
@@ -179,44 +168,11 @@ class Response
 
 	/**
 	 * @param array $decoded
-	 * @param Request $request
 	 * @return Response
 	 */
-	public static function createWithRequest(array $decoded, Request $request)
+	public static function createFromArray(array $decoded)
 	{
-		return new static($decoded, $request, $request->getResponseVerifyKeysOrder());
-	}
-
-
-
-	/**
-	 * @param array $decoded
-	 * @param array $verifyKeysOrder
-	 * @return Response
-	 */
-	public static function createFromArray(array $decoded, array $verifyKeysOrder = [])
-	{
-		return new static($decoded, NULL, $verifyKeysOrder);
-	}
-
-
-
-	/**
-	 * @param array $decoded
-	 * @return Response
-	 */
-	public static function createFromInitResponse(array $decoded)
-	{
-		return new static($decoded, NULL, [
-			'payId',
-			'dttm',
-			'resultCode',
-			'resultMessage',
-			'paymentStatus',
-			'authCode',
-			'merchantData',
-			'cardToken',
-		]);
+		return new static($decoded, NULL);
 	}
 
 }

@@ -10,9 +10,7 @@
 
 namespace Kdyby\CsobPaymentGateway;
 
-use Bitbang\Http;
-use Kdyby\CsobPaymentGateway\Certificate\PrivateKey;
-use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
+use Kdyby\CsobPaymentGateway\Message\Signature;
 use Psr\Log\LoggerInterface;
 
 
@@ -46,14 +44,9 @@ class Client
 	private $config;
 
 	/**
-	 * @var PrivateKey
+	 * @var Signature
 	 */
-	private $privateKey;
-
-	/**
-	 * @var PublicKey
-	 */
-	private $publicKey;
+	private $signature;
 
 	/**
 	 * @var IHttpClient
@@ -67,11 +60,10 @@ class Client
 
 
 
-	public function __construct(Configuration $config, PrivateKey $privateKey, PublicKey $publicKey, IHttpClient $httpClient)
+	public function __construct(Configuration $config, Signature $signature, IHttpClient $httpClient)
 	{
 		$this->config = $config;
-		$this->privateKey = $privateKey;
-		$this->publicKey = $publicKey;
+		$this->signature = $signature;
 		$this->httpClient = $httpClient;
 	}
 
@@ -117,25 +109,7 @@ class Client
 		}
 
 		$data = $payment->toArray();
-		$signatureString = Helpers::arrayToSignatureString($data, [
-			'merchantId',
-			'orderNo',
-			'dttm',
-			'payOperation',
-			'payMethod',
-			'totalAmount',
-			'currency',
-			'closePayment',
-			'returnUrl',
-			'returnMethod',
-			'cart',
-			'description',
-			'merchantData',
-			'customerId',
-			'language',
-		]);
-
-		$data['signature'] = $this->privateKey->sign($signatureString);
+		$data['signature'] = $this->signature->signPayment($data);
 
 		return $this->processRequest(Message\Request::paymentInit($data));
 	}
@@ -155,7 +129,7 @@ class Client
 			'payId' => $paymentId,
 			'dttm' => $this->formatDatetime(),
 		];
-		$data['signature'] = $this->simpleSign($data);
+		$data['signature'] = $this->signature->simpleSign($data);
 
 		return new Message\RedirectResponse($this->buildUrl('payment/process/:merchantId/:payId/:dttm/:signature', $data));
 	}
@@ -241,17 +215,7 @@ class Client
 		}
 
 		$data = $payment->toArray();
-		$signatureString = Helpers::arrayToSignatureString($data, [
-			'merchantId',
-			'origPayId',
-			'orderNo',
-			'dttm',
-			'totalAmount',
-			'currency',
-			'description',
-		]);
-
-		$data['signature'] = $this->privateKey->sign($signatureString);
+		$data['signature'] = $this->signature->signPayment($data);
 
 		return $this->processRequest(Message\Request::paymentRecurrent($data));
 	}
@@ -296,7 +260,7 @@ class Client
 			'signature',
 		], NULL);
 
-		return Message\Response::createFromArray($data)->verify($this->publicKey);
+		return Message\Response::createFromArray($data)->verify($this->signature);
 	}
 
 
@@ -342,7 +306,7 @@ class Client
 				throw new ApiException(sprintf('The "resultCode" key is missing in response %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
-			$response = Message\Response::createWithRequest($decoded, $request);
+			$response = new Message\Response($decoded, $request);
 
 			if ($decoded['resultCode'] === PaymentException::INTERNAL_ERROR) {
 				throw InternalErrorException::fromResponse($decoded, $response);
@@ -352,7 +316,7 @@ class Client
 				throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
-			$response->verify($this->publicKey);
+			$response->verify($this->signature);
 
 			switch ($decoded['resultCode']) {
 				case PaymentException::MISSING_PARAMETER:
@@ -394,7 +358,7 @@ class Client
 		$data = $request->toArray();
 
 		if (empty($data['signature'])) {
-			$data['signature'] = $this->simpleSign($data);
+			$data['signature'] = $this->signature->simpleSign($data);
 		}
 
 		$url = $this->buildUrl($request->getEndpoint(), $data);
@@ -428,17 +392,6 @@ class Client
 		}, $endpoint);
 
 		return $this->config->getUrl() . '/' . $endpoint;
-	}
-
-
-
-	/**
-	 * @param array $data
-	 * @return string
-	 */
-	protected function simpleSign(array $data)
-	{
-		return $this->privateKey->sign(Helpers::arrayToSignatureString($data));
 	}
 
 
