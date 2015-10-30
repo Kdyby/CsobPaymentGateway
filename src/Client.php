@@ -188,16 +188,28 @@ class Client
 
 
 	/**
+	 * Please note, that when you wanna provide 100.25 CZK,
+	 * you should pass here the number 10025
+	 *
 	 * @param string $paymentId
+	 * @param int $amount In hundredth of currency units
 	 * @return Message\Response
 	 */
-	public function paymentRefund($paymentId)
+	public function paymentRefund($paymentId, $amount = NULL)
 	{
 		$data = [
 			'merchantId' => $this->config->getMerchantId(),
 			'payId' => $paymentId,
 			'dttm' => $this->formatDatetime(),
 		];
+
+		if ($amount !== NULL) {
+			if (!is_integer($amount)) {
+				throw new InvalidArgumentException('Amount must be an integer. For example 100.25 must be passed as 10025.');
+			}
+
+			$data['amount'] = $amount;
+		}
 
 		return $this->processRequest(Message\Request::paymentRefund($data));
 	}
