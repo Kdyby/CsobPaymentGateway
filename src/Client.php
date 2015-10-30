@@ -56,7 +56,7 @@ class Client
 	private $publicKey;
 
 	/**
-	 * @var Http\IClient
+	 * @var IHttpClient
 	 */
 	private $httpClient;
 
@@ -67,7 +67,7 @@ class Client
 
 
 
-	public function __construct(Configuration $config, PrivateKey $privateKey, PublicKey $publicKey, Http\IClient $httpClient)
+	public function __construct(Configuration $config, PrivateKey $privateKey, PublicKey $publicKey, IHttpClient $httpClient)
 	{
 		$this->config = $config;
 		$this->privateKey = $privateKey;
@@ -137,7 +137,7 @@ class Client
 
 		$data['signature'] = $this->privateKey->sign($signatureString);
 
-		return $this->sendRequest(Message\Request::paymentInit($data));
+		return $this->processRequest(Message\Request::paymentInit($data));
 	}
 
 
@@ -174,7 +174,7 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
-		return $this->sendRequest(Message\Request::paymentStatus($data));
+		return $this->processRequest(Message\Request::paymentStatus($data));
 	}
 
 
@@ -191,7 +191,7 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
-		return $this->sendRequest(Message\Request::paymentReverse($data));
+		return $this->processRequest(Message\Request::paymentReverse($data));
 	}
 
 
@@ -208,7 +208,7 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
-		return $this->sendRequest(Message\Request::paymentClose($data));
+		return $this->processRequest(Message\Request::paymentClose($data));
 	}
 
 
@@ -225,7 +225,7 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
-		return $this->sendRequest(Message\Request::paymentRefund($data));
+		return $this->processRequest(Message\Request::paymentRefund($data));
 	}
 
 
@@ -253,7 +253,7 @@ class Client
 
 		$data['signature'] = $this->privateKey->sign($signatureString);
 
-		return $this->sendRequest(Message\Request::paymentRecurrent($data));
+		return $this->processRequest(Message\Request::paymentRecurrent($data));
 	}
 
 
@@ -270,7 +270,7 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
-		return $this->sendRequest(Message\Request::customerInfo($data));
+		return $this->processRequest(Message\Request::customerInfo($data));
 	}
 
 
@@ -307,40 +307,39 @@ class Client
 	 * @throws PaymentException
 	 * @return Message\Response
 	 */
-	public function sendRequest(Message\Request $request)
+	public function processRequest(Message\Request $request)
 	{
 		$response = NULL;
 		try {
+			foreach ($this->onRequest as $callback) {
+				call_user_func($callback, $request);
+			}
+
 			try {
-				$httpRequest = $this->requestToHttpRequest($request);
-				foreach ($this->onRequest as $callback) {
-					call_user_func($callback, $request);
-				}
+				$httpResponse = $this->sendHttpRequest($request);
 
-				$httpResponse = $this->httpClient->request($httpRequest);
-
-			} catch (Http\IException $e) {
+			} catch (\Exception $e) {
 				throw new ApiException($e->getMessage(), 0, $e);
 			}
 
-			switch ($httpResponse->getCode()) {
+			switch ($httpResponse->getStatusCode()) {
 				case ApiException::S400_BAD_REQUEST:
 				case ApiException::S403_FORBIDDEN:
 				case ApiException::S404_NOT_FOUND:
-					throw new ApiException('Payment is probably in wrong state or request is broken', $httpResponse->getCode());
+					throw new ApiException('Payment is probably in wrong state or request is broken', $httpResponse->getStatusCode());
 				case ApiException::S429_TOO_MANY_REQUESTS:
-					throw new ApiException('Too Many Requests', $httpResponse->getCode());
+					throw new ApiException('Too Many Requests', $httpResponse->getStatusCode());
 				case ApiException::S503_SERVICE_UNAVAILABLE:
-					throw new ApiException('Service is down for maintenance', $httpResponse->getCode());
+					throw new ApiException('Service is down for maintenance', $httpResponse->getStatusCode());
 			}
 
 			$decoded = @json_decode($responseBody = $httpResponse->getBody(), TRUE);
 			if ($decoded === NULL) {
-				throw new ApiException(sprintf('API returned invalid json %s', $responseBody), $httpResponse->getCode());
+				throw new ApiException(sprintf('API returned invalid json %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
 			if (!isset($decoded['resultCode'])) {
-				throw new ApiException(sprintf('The "resultCode" key is missing in response %s', $responseBody), $httpResponse->getCode());
+				throw new ApiException(sprintf('The "resultCode" key is missing in response %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
 			$response = Message\Response::createWithRequest($decoded, $request);
@@ -350,7 +349,7 @@ class Client
 			}
 
 			if (empty($decoded['signature'])) {
-				throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', $responseBody), $httpResponse->getCode());
+				throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
 			$response->verify($this->publicKey);
@@ -388,9 +387,9 @@ class Client
 
 	/**
 	 * @param Message\Request $request
-	 * @return Http\Request
+	 * @return \Psr\Http\Message\ResponseInterface
 	 */
-	protected function requestToHttpRequest(Message\Request $request)
+	protected function sendHttpRequest(Message\Request $request)
 	{
 		$data = $request->toArray();
 
@@ -401,13 +400,15 @@ class Client
 		$url = $this->buildUrl($request->getEndpoint(), $data);
 
 		$headers = [
+			'Connection' => 'keep-alive',
+			'Expect' => '',
 			'Content-Type' => 'application/json',
 			'Accept' => 'application/json;charset=UTF-8',
 		];
 
 		$body = $request->isMethodGet() ? NULL : json_encode($data);
 
-		return new Http\Request($request->getMethod(), $url, $headers, $body);
+		return $this->httpClient->request($request->getMethod(), $url, $headers, $body);
 	}
 
 

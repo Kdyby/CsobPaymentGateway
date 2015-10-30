@@ -10,8 +10,6 @@
 
 namespace Kdyby\CsobPaymentGateway\Message;
 
-use Bitbang\Http;
-
 
 
 /**
@@ -20,9 +18,9 @@ use Bitbang\Http;
 class Request
 {
 
-	const GET = Http\Request::GET;
-	const POST = Http\Request::POST;
-	const PUT = Http\Request::PUT;
+	const GET = 'GET';
+	const POST = 'POST';
+	const PUT = 'PUT';
 
 	/**
 	 * @var string

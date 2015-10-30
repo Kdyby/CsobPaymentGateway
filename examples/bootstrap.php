@@ -4,13 +4,13 @@ use Kdyby\CsobPaymentGateway\Certificate\PrivateKey;
 use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
-use Bitbang\Http;
+use Psr\Http;
 
 
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-function formatHttpMessage(Http\Message $message = NULL)
+function formatHttpMessage(Http\Message\MessageInterface $message = NULL)
 {
 	if ($message === NULL) {
 		return '';
@@ -20,20 +20,20 @@ function formatHttpMessage(Http\Message $message = NULL)
 	$direction = '? ';
 	$headers = $message->getHeaders();
 
-	if ($message instanceof Http\Request) {
+	if ($message instanceof Http\Message\RequestInterface) {
 		$direction = '> ';
 
-		$url = Http\Helpers::parseUrl($message->getUrl());
-		$path = '/' . ltrim($url['path'], '/');
-		$path .= (!empty($url['query']) ? '?' . http_build_query($url['query'], NULL, '&') : '');
-		$path .= (!empty($url['fragment']) ? '#' . $url['fragment'] : '');
-		$dump .= $direction . htmlspecialchars($message->getMethod()) . ' ' . htmlspecialchars($path) . ' HTTP/1.1' . "\n";
-		$dump .= $direction . 'Host: ' . htmlspecialchars($url['host']) . "\n";
+		$uri = $message->getUri();
+		$path = $uri->getPath();
+		$path .= ($uri->getQuery() ? '?' . $uri->getQuery() : '');
+		$path .= ($uri->getFragment() ? '#' . $uri->getFragment() : '');
+		$dump .= $direction . htmlspecialchars($message->getMethod());
+		$dump .= ' ' . htmlspecialchars($path) . ' HTTP/' . $message->getProtocolVersion() . "\n";
 
-	} elseif ($message instanceof Http\Response) {
+	} elseif ($message instanceof Http\Message\ResponseInterface) {
 		$direction = '< ';
 
-		$dump .= $direction . 'HTTP/1.1 ' . htmlspecialchars($message->getCode()) . ' ' . $headers[''] . "\n";
+		$dump .= $direction . 'HTTP/1.1 ' . htmlspecialchars($message->getStatusCode()) . ' ' . $headers[''] . "\n";
 	}
 
 	foreach ($headers as $key => $val) {
@@ -42,7 +42,7 @@ function formatHttpMessage(Http\Message $message = NULL)
 		}
 	}
 
-	if ($body = $message->getBody()) {
+	if ($body = (string) $message->getBody()) {
 		$dump .= "\n" . htmlspecialchars($body) . "\n\n";
 	}
 
@@ -63,11 +63,11 @@ $lastRequest = $lastHttpResponse = $lastHttpRequest = NULL;
 $client->onRequest[] = function ($request) use (&$lastRequest) {
 	$lastRequest = $request;
 };
-$httpClient->onRequest(function ($request) use (&$lastHttpRequest) {
+$httpClient->onRequest[] = function ($request) use (&$lastHttpRequest) {
 	$lastHttpRequest = $request;
-});
-$httpClient->onResponse(function ($response) use (&$lastHttpResponse) {
+};
+$httpClient->onResponse[] = function ($response) use (&$lastHttpResponse) {
 	$lastHttpResponse = $response;
-});
+};
 
 $selfUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim(dirname($_SERVER['DOCUMENT_URI']) . '/payment-return.php', '/');

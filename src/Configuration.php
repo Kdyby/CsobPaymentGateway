@@ -10,7 +10,6 @@
 
 namespace Kdyby\CsobPaymentGateway;
 
-use Bitbang\Http;
 
 
 
@@ -177,11 +176,10 @@ class Configuration
 
 
 	/**
-	 * @return Http\IClient|Http\Clients\AbstractClient
+	 * @return IHttpClient
 	 */
 	public static function createDefaultHttpClient()
 	{
-		return new Http\Clients\CurlClient();
 	}
 
 }

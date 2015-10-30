@@ -17,8 +17,8 @@
 		"issues": "https://github.com/Kdyby/CsobPaymentGateway/issues"
 	},
 	"require": {
-		"bitbang/http": "^0.1",
-		"psr/log": "^1.0"
+		"psr/log": "^1.0",
+		"psr/http-message": "^1.0"
 	},
 	"require-dev": {
 		"nette/tester": "^1.6"
