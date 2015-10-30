@@ -176,10 +176,11 @@ class Configuration
 
 
 	/**
-	 * @return IHttpClient
+	 * @return IHttpClient|Http\GuzzleClient
 	 */
 	public static function createDefaultHttpClient()
 	{
+		return new Http\GuzzleClient();
 	}
 
 }
