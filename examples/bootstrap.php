@@ -33,7 +33,8 @@ function formatHttpMessage(Http\Message\MessageInterface $message = NULL)
 	} elseif ($message instanceof Http\Message\ResponseInterface) {
 		$direction = '< ';
 
-		$dump .= $direction . 'HTTP/1.1 ' . htmlspecialchars($message->getStatusCode()) . ' ' . $headers[''] . "\n";
+		$dump .= $direction . 'HTTP/ ' . $message->getProtocolVersion();
+		$dump .= htmlspecialchars($message->getStatusCode()) . ' ' . $headers[''] . "\n";
 	}
 
 	foreach ($headers as $key => $val) {
