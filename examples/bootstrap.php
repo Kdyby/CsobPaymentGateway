@@ -35,7 +35,7 @@ function formatHttpMessage(Http\Message\MessageInterface $message = NULL)
 		$direction = '< ';
 
 		$dump .= $direction . 'HTTP/ ' . $message->getProtocolVersion();
-		$dump .= htmlspecialchars($message->getStatusCode()) . ' ' . $headers[''] . "\n";
+		$dump .= ' ' . htmlspecialchars($message->getStatusCode()) . ' ' . $headers[''] . "\n";
 	}
 
 	foreach ($headers as $key => $val) {
