@@ -394,7 +394,7 @@ class Payment
 	public function addCartItem($name, $price, $quantity = 1, $description = NULL)
 	{
 		if (!is_integer($price)) {
-			throw new InvalidArgumentException('TotalAmount must be an integer. For example 100.25 must be passed as 10025.');
+			throw new InvalidArgumentException('Price must be an integer. For example 100.25 must be passed as 10025.');
 		}
 
 		if (!is_numeric($quantity) || $quantity < 1) {
