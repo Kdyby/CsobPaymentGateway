@@ -454,6 +454,17 @@ class Payment
 
 
 	/**
+	 * Cleans the cart.
+	 */
+	public function removeCartItems()
+	{
+		$this->cart = [];
+		$this->totalAmount = 0;
+	}
+
+
+
+	/**
 	 * @return array
 	 */
 	public function getCartItems()
