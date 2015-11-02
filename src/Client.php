@@ -281,6 +281,7 @@ class Client
 	 * @param Message\Request $request
 	 * @throws ApiException
 	 * @throws PaymentException
+	 * @throws SigningException
 	 * @return Message\Response
 	 */
 	public function processRequest(Message\Request $request)
