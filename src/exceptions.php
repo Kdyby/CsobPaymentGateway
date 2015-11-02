@@ -16,6 +16,17 @@ interface Exception
 }
 
 
+interface ExceptionWithResponse
+{
+
+	/**
+	 * @return Message\Response
+	 */
+	public function getResponse();
+
+}
+
+
 
 class InvalidArgumentException extends \InvalidArgumentException implements Exception
 {
@@ -31,8 +42,36 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
 
 
 
-class SigningException extends \RuntimeException implements Exception
+class SigningException extends \RuntimeException implements Exception, ExceptionWithResponse
 {
+
+	/**
+	 * @var Message\Response
+	 */
+	private $response;
+
+
+
+	/**
+	 * @return Message\Response
+	 */
+	public function getResponse()
+	{
+		return $this->response;
+	}
+
+
+
+	/**
+	 * @param Message\Response $response
+	 * @return SigningException
+	 */
+	public static function fromResponse(Message\Response $response)
+	{
+		$e = new static('Result signature is incorrect.');
+		$e->response = $response;
+		return $e;
+	}
 
 }
 
@@ -66,7 +105,7 @@ class ApiException extends \RuntimeException implements Exception
 
 
 
-class PaymentException extends \RuntimeException implements Exception
+class PaymentException extends \RuntimeException implements Exception, ExceptionWithResponse
 {
 
 	const OK = 0; // operace proběhla korektně, transakce založena, stav aktualizován apod

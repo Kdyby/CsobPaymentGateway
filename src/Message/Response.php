@@ -138,7 +138,7 @@ class Response
 	public function verify(Signature $signature)
 	{
 		if ($signature->verifyResponse($this->data, $this->data['signature']) !== TRUE) {
-			throw new SigningException('Result signature is incorrect.');
+			throw SigningException::fromResponse($this);
 		}
 
 		return $this;
