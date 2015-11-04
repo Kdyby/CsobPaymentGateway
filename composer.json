@@ -25,7 +25,8 @@
 	},
 	"require-dev": {
 		"guzzlehttp/guzzle": "^6.0",
-		"nette/tester": "^1.6"
+		"nette/tester": "^1.6",
+		"mockery/mockery": "^0.9"
 	},
 	"autoload": {
 		"psr-4": {
