@@ -6,11 +6,10 @@
  * @testCase
  */
 
-namespace KdybyTests\Clock;
+namespace KdybyTests\CsobPaymentGateway;
 
 use Kdyby;
 use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
-use Nette;
 use Tester;
 use Tester\Assert;
 
