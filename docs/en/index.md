@@ -16,6 +16,13 @@ The best way to install Kdyby/CsobPaymentGateway is using [Composer](http://getc
 $ composer require kdyby/csob-payment-gateway
 ```
 
+You also need to choose a PSR7 compatible HTTP Client.
+This library contains a default `GuzzleClient`, but guzzle is not installed by default, only suggested.
+
+```sh
+$ composer require guzzlehttp/guzzle
+```
+
 
 Setup
 -----
