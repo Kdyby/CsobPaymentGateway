@@ -17,11 +17,15 @@ $ composer require kdyby/csob-payment-gateway
 ```
 
 You also need to choose a PSR7 compatible HTTP Client.
-This library contains a default `GuzzleClient`, but guzzle is not installed by default, only suggested.
+This library contains a default `GuzzleClient`, but Guzzle is not installed by default.
+
+It is recommended to just use Guzzle, so you should also install using Composer.
 
 ```sh
 $ composer require guzzlehttp/guzzle
 ```
+
+If you don't wanna use Guzzle, that's fine, you're just gonna have implement your own `Kdyby\CsobPaymentGateway\IHttpClient`.
 
 
 Setup
