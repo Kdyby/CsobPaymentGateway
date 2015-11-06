@@ -28,8 +28,8 @@ $ composer require guzzlehttp/guzzle
 If you don't wanna use Guzzle, that's fine, you're just gonna have implement your own `Kdyby\CsobPaymentGateway\IHttpClient`.
 
 
-Setup
------
+Setup sandbox
+-------------
 
 ```php
 use Kdyby\CsobPaymentGateway\Certificate;
@@ -41,7 +41,7 @@ use Kdyby\CsobPaymentGateway\Http\GuzzleClient;
 $client = new Client(
     new Configuration('123456', 'example.org'),
     new Signature(
-        new Certificate\PrivateKey(__DIR__ . '/private/csob.key', 'password'),
+        new Certificate\PrivateKey(__DIR__ . '/private/sandbox/csob.key', 'password'),
         new Certificate\PublicKey(Configuration::getCsobSandboxCertPath())
     ),
     new GuzzleClient()
@@ -86,3 +86,30 @@ if($response->getPaymentStatus() === Payment::STATUS_APPROVED) {
 
 Please refer to [the CSOB documentation](https://github.com/csob/paymentgateway/wiki/eAPI-1.5#return-url---n%C3%A1vrat-do-e-shopu-) and learn what states you should to check,
 they should be all available as `Payment::STATUS_*` constants.
+
+
+
+Going to production
+-------------------
+
+When you've completed integrating the gateway into your application, you have to tell the client, that you wanna use production settings.
+
+- change the `url` of api endpoint in `Configuration`
+- change path to `PrivateKey` certificate to your production certificate
+- change path to `PublicKey` certificate to the production one
+
+It could look like this
+
+```php
+$config = new Configuration('123456', 'example.org');
+$config->setUrl(Configuration::DEFAULT_PRODUCTION_URL);
+
+$client = new Client(
+    $config,
+    new Signature(
+        new Certificate\PrivateKey(__DIR__ . '/private/production/csob.key', 'password'),
+        new Certificate\PublicKey(Configuration::getCsobProductionCertPath())
+    ),
+    new GuzzleClient()
+);
+```
