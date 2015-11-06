@@ -19,7 +19,7 @@ $ composer require kdyby/csob-payment-gateway
 You also need to choose a PSR7 compatible HTTP Client.
 This library contains a default `GuzzleClient`, but Guzzle is not installed by default.
 
-It is recommended to just use Guzzle, so you should also install using Composer.
+It is recommended to just use Guzzle, so you should also install it using Composer.
 
 ```sh
 $ composer require guzzlehttp/guzzle
@@ -55,7 +55,7 @@ Processing a payment
 First, you have to configure a `Payment` object and initialize the payment over CSOB API.
 Then you can redirect the user to the gateway.
 
-**WARNING:** Please note, that all the prices are in In hundredths of currency units.
+**WARNING:** Please note, that all the prices are in hundredths of currency units.
 It means that when you wanna init a payment for 100.25 CZK, you should pass here the integer 10025.
 
 
@@ -84,4 +84,5 @@ if($response->getPaymentStatus() === Payment::STATUS_APPROVED) {
 }
 ```
 
-Please refer to [the CSOB documentation](https://github.com/csob/paymentgateway/wiki/eAPI-1.5#return-url---n%C3%A1vrat-do-e-shopu-) and learn there what state you need to check.
+Please refer to [the CSOB documentation](https://github.com/csob/paymentgateway/wiki/eAPI-1.5#return-url---n%C3%A1vrat-do-e-shopu-) and learn what states you should to check,
+they should be all available as `Payment::STATUS_*` constants.
