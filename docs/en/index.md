@@ -60,8 +60,8 @@ It means that when you wanna init a payment for 100.25 CZK, you should pass here
 
 
 ```php
-$payment = $client->createPayment('ORD0001')
-    ->setDescription('Order 0001')
+$payment = $client->createPayment(123)
+    ->setDescription('Order 123')
     ->addCartItem('Item 1', 10 * 100, 1)
     ->addCartItem('Item 2', 11 * 100, 1)
     ->setReturnUrl('https://example.org/return');
