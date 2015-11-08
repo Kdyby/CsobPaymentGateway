@@ -437,7 +437,7 @@ class Client
 			return;
 		}
 
-		list($name) = explode($request->getEndpoint(), '/:', 2);
+		list($name) = explode('/:', $request->getEndpoint(), 2);
 
 		$context = [
 			'request' => $request->toArray(),
