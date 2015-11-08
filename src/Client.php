@@ -129,6 +129,11 @@ class Client
 			'payId' => $paymentId,
 			'dttm' => $this->formatDatetime(),
 		];
+
+		if ($this->logger) {
+			$this->logger->info('payment/process', ['request' => $data]);
+		}
+
 		$data['signature'] = $this->signature->simpleSign($data);
 
 		return new Message\RedirectResponse($this->buildUrl('payment/process/:merchantId/:payId/:dttm/:signature', $data));
@@ -350,12 +355,19 @@ class Client
 				call_user_func($callback, $response);
 			}
 
+			$this->logRequest($request, $response);
+
 			return $response;
 
-		} catch (Exception $e) {
-			foreach ($this->onError as $callback) {
-				call_user_func($callback, $e, $response);
+		} catch (\Exception $e) {
+			$this->logRequest($request, $response, $e);
+
+			if ($e instanceof Exception) {
+				foreach ($this->onError as $callback) {
+					call_user_func($callback, $e, $response);
+				}
 			}
+
 			throw $e;
 		}
 	}
@@ -415,6 +427,40 @@ class Client
 	protected function formatDatetime()
 	{
 		return date(self::DTTM_FORMAT);
+	}
+
+
+
+	protected function logRequest(Message\Request $request, Message\Response $response = NULL, \Exception $exception = NULL)
+	{
+		if (!$this->logger) {
+			return;
+		}
+
+		list($name) = explode($request->getEndpoint(), '/:', 2);
+
+		$context = [
+			'request' => $request->toArray(),
+			'response' => $response ? $response->toArray() : NULL
+		];
+		unset($context['request']['signature']);
+		unset($context['response']['signature']);
+
+		if ($exception === NULL) {
+			if ($msg = $response->getResultMessage()) {
+				$this->logger->info(sprintf('%s: %s', $name, $msg), $context);
+			} else {
+				$this->logger->info($name, $context);
+			}
+
+		} else {
+			$context['exception'] = [
+				'type' => get_class($exception),
+				'code' => $exception->getCode(),
+				'message' => $exception->getMessage(),
+			];
+			$this->logger->error($name, $context);
+		}
 	}
 
 }
