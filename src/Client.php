@@ -447,7 +447,7 @@ class Client
 		unset($context['response']['signature']);
 
 		if ($exception === NULL) {
-			if ($msg = $response->getResultMessage()) {
+			if ($response && ($msg = $response->getResultMessage())) {
 				$this->logger->info(sprintf('%s: %s', $name, $msg), $context);
 			} else {
 				$this->logger->info($name, $context);
