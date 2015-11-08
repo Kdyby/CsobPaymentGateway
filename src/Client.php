@@ -443,15 +443,13 @@ class Client
 			'request' => $request->toArray(),
 			'response' => $response ? $response->toArray() : NULL
 		];
+		$responseMsg = $response ? $response->getResultMessage() : NULL;
+
 		unset($context['request']['signature']);
 		unset($context['response']['signature']);
 
 		if ($exception === NULL) {
-			if ($response && ($msg = $response->getResultMessage())) {
-				$this->logger->info(sprintf('%s: %s', $name, $msg), $context);
-			} else {
-				$this->logger->info($name, $context);
-			}
+			$this->logger->info($name . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
 
 		} else {
 			$context['exception'] = [
@@ -459,7 +457,8 @@ class Client
 				'code' => $exception->getCode(),
 				'message' => $exception->getMessage(),
 			];
-			$this->logger->error($name, $context);
+
+			$this->logger->error($name . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
 		}
 	}
 
