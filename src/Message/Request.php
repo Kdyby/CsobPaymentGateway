@@ -79,6 +79,17 @@ class Request
 
 
 	/**
+	 * @return string
+	 */
+	public function getEndpointName()
+	{
+		list($name) = explode('/:', $this->endpoint, 2);
+		return $name;
+	}
+
+
+
+	/**
 	 * @return array
 	 */
 	public function toArray()

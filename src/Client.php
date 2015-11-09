@@ -437,8 +437,6 @@ class Client
 			return;
 		}
 
-		list($name) = explode('/:', $request->getEndpoint(), 2);
-
 		$context = [
 			'request' => $request->toArray(),
 			'response' => $response ? $response->toArray() : NULL
@@ -449,7 +447,7 @@ class Client
 		unset($context['response']['signature']);
 
 		if ($exception === NULL) {
-			$this->logger->info($name . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
+			$this->logger->info($request->getEndpointName() . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
 
 		} else {
 			$context['exception'] = [
@@ -458,7 +456,7 @@ class Client
 				'message' => $exception->getMessage(),
 			];
 
-			$this->logger->error($name . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
+			$this->logger->error($request->getEndpointName() . ($responseMsg ? ': ' . $responseMsg : NULL), $context);
 		}
 	}
 
