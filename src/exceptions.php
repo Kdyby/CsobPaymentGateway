@@ -144,7 +144,7 @@ class PaymentException extends \RuntimeException implements Exception, Exception
 	 */
 	public static function fromResponse(array $data, Message\Response $response)
 	{
-		$e = new static($data['resultMessage'], (int) $data['resultCode']);
+		$e = new static(!empty($data['resultMessage']) ? $data['resultMessage'] : '', !empty($data['resultCode']) ? (int) $data['resultCode'] : 0);
 		$e->response = $response;
 		return $e;
 	}
