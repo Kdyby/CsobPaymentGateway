@@ -317,12 +317,7 @@ class Client
 				call_user_func($callback, $request);
 			}
 
-			try {
-				$httpResponse = $this->sendHttpRequest($request);
-
-			} catch (\Exception $e) {
-				throw new ApiException($e->getMessage(), 0, $e);
-			}
+			$httpResponse = $this->sendHttpRequest($request);
 
 			switch ($httpResponse->getStatusCode()) {
 				case ApiException::S400_BAD_REQUEST:
@@ -431,7 +426,12 @@ class Client
 
 		$body = $request->isMethodGet() ? NULL : json_encode($data);
 
-		return $this->httpClient->request($request->getMethod(), $url, $headers, $body);
+		try {
+			return $this->httpClient->request($request->getMethod(), $url, $headers, $body);
+
+		} catch (\Exception $httpException) {
+			throw new ApiException($httpException->getMessage(), 0, $httpException);
+		}
 	}
 
 
