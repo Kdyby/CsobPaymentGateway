@@ -295,6 +295,8 @@ class Client
 
 		$response->verify($this->signature);
 
+		$this->handleInvalidPaymentStatus($response);
+
 		return $response;
 	}
 
@@ -369,6 +371,8 @@ class Client
 					throw PaymentNotInValidStateException::fromResponse($decoded, $response);
 			}
 
+			$this->handleInvalidPaymentStatus($response);
+
 			foreach ($this->onResponse as $callback) {
 				call_user_func($callback, $request, $response);
 			}
@@ -387,6 +391,18 @@ class Client
 			}
 
 			throw $e;
+		}
+	}
+
+
+
+	protected function handleInvalidPaymentStatus(Message\Response $response)
+	{
+		switch ($response->getPaymentStatus()) {
+			case Payment::STATUS_CANCELED:
+				throw PaymentCanceledException::fromResponse($response->toArray(), $response);
+			case Payment::STATUS_DECLINED:
+				throw PaymentDeclinedException::fromResponse($response->toArray(), $response);
 		}
 	}
 

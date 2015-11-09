@@ -153,6 +153,20 @@ class PaymentException extends \RuntimeException implements Exception, Exception
 
 
 
+class PaymentCanceledException extends PaymentException
+{
+
+}
+
+
+
+class PaymentDeclinedException extends PaymentException
+{
+
+}
+
+
+
 class MissingParameterException extends PaymentException
 {
 
