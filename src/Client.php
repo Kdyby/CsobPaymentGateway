@@ -352,7 +352,7 @@ class Client
 			}
 
 			foreach ($this->onResponse as $callback) {
-				call_user_func($callback, $response, $request);
+				call_user_func($callback, $request, $response);
 			}
 
 			$this->logRequest($request, $response);
@@ -364,7 +364,7 @@ class Client
 
 			if ($e instanceof Exception) {
 				foreach ($this->onError as $callback) {
-					call_user_func($callback, $e, $response, $request);
+					call_user_func($callback, $request, $e, $response);
 				}
 			}
 
