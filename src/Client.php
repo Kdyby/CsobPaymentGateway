@@ -283,7 +283,19 @@ class Client
 			'signature',
 		], NULL);
 
-		return Message\Response::createFromArray($data)->verify($this->signature);
+		$response = Message\Response::createFromArray($data);
+
+		// todo: call onResponse?
+
+		if ($this->logger) {
+			$logParams = $data;
+			unset($logParams['signature']);
+			$this->logger->info('payment/process', ['response' => $logParams]);
+		}
+
+		$response->verify($this->signature);
+
+		return $response;
 	}
 
 
