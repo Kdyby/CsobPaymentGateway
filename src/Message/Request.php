@@ -114,6 +114,17 @@ class Request
 	 * @param array $data
 	 * @return Request
 	 */
+	public static function paymentProcess(array $data)
+	{
+		return new static(self::GET, 'payment/process/:merchantId/:payId/:dttm/:signature', $data);
+	}
+
+
+
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
 	public static function paymentStatus(array $data)
 	{
 		return new static(self::GET, 'payment/status/:merchantId/:payId/:dttm/:signature', $data);

@@ -130,13 +130,19 @@ class Client
 			'dttm' => $this->formatDatetime(),
 		];
 
+		$request = Message\Request::paymentProcess($data);
+
 		if ($this->logger) {
-			$this->logger->info('payment/process', ['request' => $data]);
+			$this->logger->info($request->getEndpointName(), ['request' => $request->toArray()]);
+		}
+
+		foreach ($this->onRequest as $callback) {
+			call_user_func($callback, $request);
 		}
 
 		$data['signature'] = $this->signature->simpleSign($data);
 
-		return new Message\RedirectResponse($this->buildUrl('payment/process/:merchantId/:payId/:dttm/:signature', $data));
+		return new Message\RedirectResponse($this->buildUrl($request->getEndpoint(), $data));
 	}
 
 
