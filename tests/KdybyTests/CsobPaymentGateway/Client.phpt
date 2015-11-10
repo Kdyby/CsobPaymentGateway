@@ -8,13 +8,10 @@
 
 namespace KdybyTests\CsobPaymentGateway;
 
-use GuzzleHttp\Psr7\Response;
 use Kdyby\CsobPaymentGateway\Certificate\PrivateKey;
 use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
-use Kdyby\CsobPaymentGateway\Http\GuzzleClient;
-use Kdyby\CsobPaymentGateway\IHttpClient;
 use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
 use Kdyby\CsobPaymentGateway\Message\Signature;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -22,6 +19,7 @@ use Tester;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/HttpClientMock.php';
 
 
 
@@ -37,6 +35,7 @@ class ClientTest extends Tester\TestCase
 	private $client;
 
 
+
 	protected function setUp()
 	{
 		parent::setUp();
@@ -46,9 +45,10 @@ class ClientTest extends Tester\TestCase
 				new PrivateKey(__DIR__ . '/../../../examples/keys/rsa_A1029DTmM7.key', NULL),
 				new PublicKey(Configuration::getCsobSandboxCertPath())
 			),
-			$this->mockHttpClient()
+			new HttpClientMock()
 		);
 	}
+
 
 
 	public function testPaymentProcess()
@@ -83,7 +83,7 @@ class ClientTest extends Tester\TestCase
 		$client = new Client(
 			new Configuration('A1029DTmM7', 'Test shop'),
 			$signature = \Mockery::mock(Signature::class),
-			$this->mockHttpClient()
+			new HttpClientMock()
 		);
 		$signature->shouldReceive('verifyResponse')->with(\Mockery::type('array'), 'signature')->andReturn(TRUE);
 
@@ -102,52 +102,6 @@ class ClientTest extends Tester\TestCase
 		Assert::same('OK', $returnResponse->getResultMessage());
 		Assert::same(Payment::STATUS_TO_CLEARING, $returnResponse->getPaymentStatus());
 		Assert::same(637413, $returnResponse->getAuthCode());
-	}
-
-
-
-	/**
-	 * @return \Mockery\Mock|IHttpClient
-	 */
-	private function mockHttpClient()
-	{
-		$guzzle = new GuzzleClient();
-
-		$client = \Mockery::mock(IHttpClient::class)->shouldDeferMissing();
-		$client->shouldReceive('request')->andReturnUsing(function ($method, $url, $headers, $body) use ($guzzle) {
-			$parsedUrl = parse_url($url);
-			$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-
-			if ($path === '/api/v1.5/payment/init' && $method === 'POST') {
-				$decodedBody = json_decode($body, TRUE);
-				$targetFile = __DIR__ . '/api-data/init_' . $decodedBody['merchantId'] . '_' . $decodedBody['orderNo'] . '.json';
-
-			} elseif (strpos($path, '/api/v1.5/payment/status') === 0 && $method === 'GET') {
-				list(,,,,, $merchantId, $payId) = explode('/', $path);
-				$targetFile = __DIR__ . '/api-data/status_' . $merchantId . '_' . $payId . '.json';
-
-			} else {
-				throw new \LogicException(sprintf('Unexpected %s to endpoint %s', $method, $path));
-			}
-
-			if (!file_exists($targetFile)) {
-				$response = $guzzle->request($method, $url, $headers, $body);
-				$data = [
-					'status' => $response->getStatusCode(),
-					'headers' => $response->getHeaders(),
-					'body' => $response->getBody()->getContents(),
-				];
-				file_put_contents($targetFile, json_encode($data));
-
-			} else {
-				$data = json_decode(file_get_contents($targetFile), TRUE);
-				$response = new Response($data['status'], $data['headers'], $data['body']);
-			}
-
-			return $response;
-		});
-
-		return $client;
 	}
 
 
