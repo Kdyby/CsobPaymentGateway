@@ -60,7 +60,7 @@ class HttpClientMock implements IHttpClient
 					'headers' => $response->getHeaders(),
 					'body' => $response->getBody()->getContents(),
 			];
-			file_put_contents($targetFile, json_encode($data));
+			file_put_contents($targetFile, json_encode($data, JSON_PRETTY_PRINT));
 
 		} else {
 			$data = json_decode(file_get_contents($targetFile), TRUE);
