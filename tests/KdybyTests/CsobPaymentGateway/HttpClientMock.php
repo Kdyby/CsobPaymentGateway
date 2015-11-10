@@ -5,6 +5,8 @@ namespace KdybyTests\CsobPaymentGateway;
 use GuzzleHttp\Psr7\Response;
 use Kdyby\CsobPaymentGateway\Http\GuzzleClient;
 use Kdyby\CsobPaymentGateway\IHttpClient;
+use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Psr\Http\Message\ResponseInterface;
 
 
@@ -56,15 +58,21 @@ class HttpClientMock implements IHttpClient
 		if (!file_exists($targetFile)) {
 			$response = $this->guzzle->request($method, $url, $headers, $body);
 			$data = [
-					'status' => $response->getStatusCode(),
-					'headers' => $response->getHeaders(),
-					'body' => $response->getBody()->getContents(),
+				'status' => $response->getStatusCode(),
+				'headers' => $response->getHeaders(),
 			];
+
+			$responseBody = $response->getBody()->getContents();
+			$data['body'] = json_decode($responseBody, TRUE);
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				$data['body'] = $responseBody;
+			}
+
 			file_put_contents($targetFile, json_encode($data, JSON_PRETTY_PRINT));
 
 		} else {
 			$data = json_decode(file_get_contents($targetFile), TRUE);
-			$response = new Response($data['status'], $data['headers'], $data['body']);
+			$response = new Response($data['status'], $data['headers'], json_encode($data['body']));
 		}
 
 		return $response;

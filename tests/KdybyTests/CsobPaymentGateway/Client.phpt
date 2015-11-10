@@ -12,6 +12,7 @@ use Kdyby\CsobPaymentGateway\Certificate\PrivateKey;
 use Kdyby\CsobPaymentGateway\Certificate\PublicKey;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
+use Kdyby\CsobPaymentGateway\InvalidParameterException;
 use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
 use Kdyby\CsobPaymentGateway\Message\Signature;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -19,7 +20,6 @@ use Tester;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/HttpClientMock.php';
 
 
 
@@ -55,7 +55,7 @@ class ClientTest extends Tester\TestCase
 	{
 		$payment = $this->client->createPayment(15000001)
 			->setDescription('Test payment')
-			->setReturnUrl('https://example.com/process-payment-response')
+			->setReturnUrl('https://kdyby.org/process-payment-response')
 			->addCartItem('Test item 1', 42 * 100, 1)
 			->addCartItem('Test item 2', 158 * 100, 2);
 
@@ -74,6 +74,22 @@ class ClientTest extends Tester\TestCase
 		Assert::same(0, $statusResponse->getResultCode());
 		Assert::same('OK', $statusResponse->getResultMessage());
 		Assert::same(Payment::STATUS_REQUESTED, $response->getPaymentStatus());
+	}
+
+
+
+	public function testInitDuplicatePayment()
+	{
+		Assert::throws(function () {
+			$payment = $this->client->createPayment(123456)
+				->setDescription('Test payment')
+				->setReturnUrl('https://kdyby.org/process-payment-response')
+				->addCartItem('Test item 1', 42 * 100, 1)
+				->addCartItem('Test item 2', 158 * 100, 2);
+
+			$this->client->paymentInit($payment);
+
+		}, InvalidParameterException::class, 'Invalid paymentInit request: authorized trx for merchantId A1029DTmM7 and orderNo 123456 already exists');
 	}
 
 

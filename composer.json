@@ -35,5 +35,10 @@
 		"classmap": [
 			"src/exceptions.php"
 		]
+	},
+	"autoload-dev": {
+		"psr-0": {
+			"KdybyTests\\CsobPaymentGateway\\": "tests/"
+		}
 	}
 }
