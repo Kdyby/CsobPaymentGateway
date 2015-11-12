@@ -45,6 +45,7 @@ class GuzzleClient implements Kdyby\CsobPaymentGateway\IHttpClient
 	 */
 	public function __construct(array $config = [])
 	{
+		$config[GuzzleHttp\RequestOptions::HTTP_ERRORS] = FALSE;
 		$this->client = new GuzzleHttp\Client($config);
 	}
 
@@ -65,16 +66,7 @@ class GuzzleClient implements Kdyby\CsobPaymentGateway\IHttpClient
 			call_user_func($callback, $request);
 		}
 
-		try {
-			$response = $this->client->send($request);
-
-		} catch (GuzzleHttp\Exception\RequestException $e) {
-			if (!$e->hasResponse()) {
-				throw $e;
-			}
-
-			$response = $e->getResponse();
-		}
+		$response = $this->client->send($request);
 
 		foreach ($this->onResponse as $callback) {
 			call_user_func($callback, $response);
