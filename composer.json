@@ -37,6 +37,6 @@
 		]
 	},
 	"autoload-dev": {
-		"classmap": ["tests"]
+		"classmap": ["tests/KdybyTests"]
 	}
 }
