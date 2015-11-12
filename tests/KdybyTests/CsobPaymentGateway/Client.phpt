@@ -110,14 +110,14 @@ class ClientTest extends Tester\TestCase
 			'resultMessage' => 'OK',
 			'paymentStatus' => Payment::STATUS_TO_CLEARING,
 			'signature' => 'signature',
-			'authCode' => 637413,
+			'authCode' => '637413',
 		];
 		$returnResponse = $client->receiveResponse($returnData);
 		Assert::same('fb425174783f9AK', $returnResponse->getPayId());
 		Assert::same(0, $returnResponse->getResultCode());
 		Assert::same('OK', $returnResponse->getResultMessage());
 		Assert::same(Payment::STATUS_TO_CLEARING, $returnResponse->getPaymentStatus());
-		Assert::same(637413, $returnResponse->getAuthCode());
+		Assert::same('637413', $returnResponse->getAuthCode());
 	}
 
 

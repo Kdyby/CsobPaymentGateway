@@ -105,7 +105,7 @@ class Response
 	 */
 	public function getAuthCode()
 	{
-		return array_key_exists('authCode', $this->data) ? $this->data['authCode'] : NULL;
+		return array_key_exists('authCode', $this->data) ? (string) $this->data['authCode'] : NULL;
 	}
 
 
