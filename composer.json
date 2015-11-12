@@ -35,5 +35,8 @@
 		"classmap": [
 			"src/exceptions.php"
 		]
+	},
+	"autoload-dev": {
+		"classmap": ["tests"]
 	}
 }

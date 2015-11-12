@@ -1,0 +1,30 @@
+{
+    "status": 400,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Thu, 12 Nov 2015 12:42:37 GMT"
+        ],
+        "Content-Length": [
+            "0"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=7zUY7lB2vscCntVztSMfRlE092AOeBB+vo9w3+3hizrh7qHs462Xe9tGOx59m87k64o\/Zc88LRLMNO8AAAAB;secure; path=\/"
+        ]
+    },
+    "body": null
+}

@@ -17,7 +17,7 @@ before_script:
   - php vendor/php-parallel-lint/parallel-lint.php -e php,phpt --exclude vendor .
   - composer create-project --prefer-source --no-interaction nette/code-checker vendor/code-checker ~2.2
   - php vendor/code-checker/src/code-checker.php -d src
-  - php vendor/code-checker/src/code-checker.php -d tests
+  - php vendor/code-checker/src/code-checker.php -d tests -i "*.json"
   - php vendor/code-checker/src/code-checker.php -d examples
 
 script: vendor/bin/tester -p php -c ./tests/php.ini-unix ./tests/KdybyTests/

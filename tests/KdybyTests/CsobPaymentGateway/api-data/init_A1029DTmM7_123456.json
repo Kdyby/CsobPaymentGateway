@@ -1,0 +1,39 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Thu, 12 Nov 2015 12:42:37 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=jBsci9B+7acV4thztSMfRlE092AOeCzTPWqqG+Mr8vKoUYFXRgcGRCgGTxkuHPsR+kE\/IfkEXkF+GsIAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20151112134237",
+        "signature": "bcMSfDqNimLgY05H9vZAy0VdYTBGiLYoa5XN6O41+ftHIfUkmdFbnssN9HT6MYSNrCQgAvZ8fVJfj\/BZir62afOELGhpbeyXGSnkg7Rl0NrZXbRGW4ohM9IYsHIGBsSgxHew3fa1E3N1j2ZwtxG2C\/zQMshDEA1yh6smHYaTq+502qneOKcBuMiZ10a1RHIW7qgbZFfzaJNkTn0xBxVwNiPAbxCWw8DCfIIhXU9BRPG7dlrVv00t8U07ImUuvD+UKn5DT58pEhaNhBIilIHubWeJ8HGPf6Mr1y\/f+1uTM9j40KGDvf7yUDmG3YEHFjYbFFtvXobpWcKgp+LsTcGEdg==",
+        "payId": "6ffac6fb7945fAK",
+        "resultCode": 110,
+        "resultMessage": "Invalid paymentInit request: authorized trx for merchantId A1029DTmM7 and orderNo 123456 already exists"
+    }
+}
