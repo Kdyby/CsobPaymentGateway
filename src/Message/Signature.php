@@ -67,6 +67,7 @@ class Signature
 		'resultMessage',
 		'paymentStatus',
 		'authCode',
+		'merchantData',
 		'cardToken',
 	];
 
