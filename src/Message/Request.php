@@ -138,7 +138,7 @@ class Request
 	 */
 	public static function paymentReverse(array $data)
 	{
-		return new static(self::PUT, 'payment/reverse/:merchantId/:payId/:dttm/:signature', $data);
+		return new static(self::PUT, 'payment/reverse', $data);
 	}
 
 
@@ -149,7 +149,7 @@ class Request
 	 */
 	public static function paymentClose(array $data)
 	{
-		return new static(self::PUT, 'payment/close/:merchantId/:payId/:dttm/:signature', $data);
+		return new static(self::PUT, 'payment/close', $data);
 	}
 
 
@@ -160,7 +160,7 @@ class Request
 	 */
 	public static function paymentRefund(array $data)
 	{
-		return new static(self::PUT, 'payment/refund/:merchantId/:payId/:dttm/:signature', $data);
+		return new static(self::PUT, 'payment/refund', $data);
 	}
 
 
