@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Payment
+ * Payment: toArray()
  *
  * @testCase
  */
@@ -13,8 +13,6 @@ use Kdyby\CsobPaymentGateway\Payment;
 use Tester;
 use Tester\Assert;
 
-
-
 require_once __DIR__ . '/../bootstrap.php';
 
 
@@ -22,7 +20,7 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @author Jiří Pudil <me@jiripudil.cz>
  */
-class PaymentTest extends Tester\TestCase
+class PaymentToArrayTest extends Tester\TestCase
 {
 
 	public function testPayment()
@@ -164,6 +162,25 @@ class PaymentTest extends Tester\TestCase
 
 
 
+	public function testPaymentMerchantDataTooLong()
+	{
+		Assert::throws(function () {
+			$payment = new Payment('A1029DTmM7', 15000001);
+			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+			$payment->setDescription('Test payment');
+			$payment->setReturnUrl('https://example.com/process-payment-response');
+
+			$payment->addCartItem('Test item 1', 4200, 1);
+			$payment->addCartItem('Test item 2', 15800, 2);
+
+			$payment->setMerchantData($merchantData = str_repeat('foo', 1e6));
+
+			$payment->toArray();
+		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'Merchant data cannot be longer than 255 characters after base64 encoding.');
+	}
+
+
+
 	public function testRecurrentPayment()
 	{
 		$payment = new Payment('A1029DTmM7', 15000002);
@@ -230,4 +247,4 @@ class PaymentTest extends Tester\TestCase
 
 
 
-\run(new PaymentTest());
+\run(new PaymentToArrayTest());
