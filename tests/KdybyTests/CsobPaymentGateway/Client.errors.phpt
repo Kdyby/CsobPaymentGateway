@@ -84,9 +84,10 @@ class ClientErrorsTest extends CsobTestCase
 
 	public function testMissingParameter()
 	{
-		Assert::throws(function () {
-			$data = $this->createPayment(15000005)->toArray();
-			unset($data['description']);
+		$data = $this->createPayment(15000005)->toArray();
+		unset($data['description']);
+
+		Assert::throws(function () use ($data) {
 			$this->client->processRequest(Request::paymentInit($data));
 		}, MissingParameterException::class, 'Missing parameter description');
 	}

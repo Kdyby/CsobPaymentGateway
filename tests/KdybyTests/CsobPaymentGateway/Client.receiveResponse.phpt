@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Client
+ * Client: receive response
  *
  * @testCase
  */
@@ -24,7 +24,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class ClientReceiveResponseTest extends CsobTestCase
 {
 
-	public function testReceiveResponseSuccess()
+	public function testReceiveResponseToClearing()
 	{
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
@@ -41,6 +41,28 @@ class ClientReceiveResponseTest extends CsobTestCase
 		Assert::same(0, $returnResponse->getResultCode());
 		Assert::same('OK', $returnResponse->getResultMessage());
 		Assert::same(Payment::STATUS_TO_CLEARING, $returnResponse->getPaymentStatus());
+		Assert::same('637413', $returnResponse->getAuthCode());
+	}
+
+
+
+	public function testReceiveResponseApproved()
+	{
+		$returnData = [
+			'payId' => 'fb425174783f9AK',
+			'dttm' => '20151109153917',
+			'resultCode' => 0,
+			'resultMessage' => 'OK',
+			'paymentStatus' => Payment::STATUS_APPROVED,
+			'signature' => 'signature',
+			'authCode' => '637413',
+		];
+
+		$returnResponse = $this->client->receiveResponse($returnData);
+		Assert::same('fb425174783f9AK', $returnResponse->getPayId());
+		Assert::same(0, $returnResponse->getResultCode());
+		Assert::same('OK', $returnResponse->getResultMessage());
+		Assert::same(Payment::STATUS_APPROVED, $returnResponse->getPaymentStatus());
 		Assert::same('637413', $returnResponse->getAuthCode());
 	}
 
