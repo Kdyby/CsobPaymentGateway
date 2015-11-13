@@ -36,6 +36,26 @@ class ClientPaymentCloseTest extends CsobTestCase
 		Assert::same(Payment::STATUS_TO_CLEARING, $response->getPaymentStatus());
 	}
 
+
+
+	public function testPartialClose()
+	{
+		$response = $this->client->paymentClose('e1ea517e561e4AK', 200 * 100);
+		Assert::same('e1ea517e561e4AK', $response->getPayId());
+		Assert::same(0, $response->getResultCode());
+		Assert::same('OK', $response->getResultMessage());
+		Assert::same(Payment::STATUS_TO_CLEARING, $response->getPaymentStatus());
+	}
+
+
+
+	public function testPartialCloseExceedsApprovedAmount()
+	{
+		Assert::throws(function () {
+			$this->client->paymentClose('3699bae1bae60AK', 500 * 100);
+		}, InvalidParameterException::class, 'Invalid amount of payment/close');
+	}
+
 }
 
 

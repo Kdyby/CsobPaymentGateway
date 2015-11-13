@@ -183,15 +183,24 @@ class Client
 
 	/**
 	 * @param string $paymentId
+	 * @param int $totalAmount In hundredth of currency units
 	 * @return Message\Response
 	 */
-	public function paymentClose($paymentId)
+	public function paymentClose($paymentId, $totalAmount = NULL)
 	{
 		$data = [
 			'merchantId' => $this->config->getMerchantId(),
 			'payId' => $paymentId,
 			'dttm' => $this->formatDatetime(),
 		];
+
+		if ($totalAmount !== NULL) {
+			if (!is_integer($totalAmount)) {
+				throw new InvalidArgumentException('Amount must be an integer. For example 100.25 must be passed as 10025.');
+			}
+
+			$data['totalAmount'] = $totalAmount;
+		}
 
 		return $this->processRequest(Message\Request::paymentClose($data));
 	}
