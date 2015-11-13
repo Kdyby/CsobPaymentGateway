@@ -51,6 +51,10 @@ class HttpClientMock implements IHttpClient
 			list(,,,,, $merchantId, $payId) = explode('/', $path);
 			$targetFile = __DIR__ . '/api-data/status_' . $merchantId . '_' . $payId . '.json';
 
+		} elseif (strpos($path, '/api/v1.5/customer/info') === 0 && $method === 'GET') {
+			list(,,,,, $merchantId, $customerId) = explode('/', $path);
+			$targetFile = __DIR__ . '/api-data/customer_' . $merchantId . '_' . $customerId . '.json';
+
 		} else {
 			throw new \LogicException(sprintf('Unexpected %s to endpoint %s', $method, $path));
 		}
