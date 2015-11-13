@@ -40,20 +40,7 @@ class HttpClientMock implements IHttpClient
 	 */
 	public function request($method, $url, $headers, $body)
 	{
-		$parsedUrl = parse_url($url);
-		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-
-		if ($path === '/api/v1.5/payment/init' && $method === 'POST') {
-			$decodedBody = json_decode($body, TRUE);
-			$targetFile = __DIR__ . '/api-data/init_' . $decodedBody['merchantId'] . '_' . $decodedBody['orderNo'] . '.json';
-
-		} elseif (strpos($path, '/api/v1.5/payment/status') === 0 && $method === 'GET') {
-			list(,,,,, $merchantId, $payId) = explode('/', $path);
-			$targetFile = __DIR__ . '/api-data/status_' . $merchantId . '_' . $payId . '.json';
-
-		} else {
-			throw new \LogicException(sprintf('Unexpected %s to endpoint %s', $method, $path));
-		}
+		$targetFile = $this->resolveTargetFile($method, $url, $headers, $body);
 
 		if (!file_exists($targetFile)) {
 			$response = $this->guzzle->request($method, $url, $headers, $body);
@@ -76,6 +63,46 @@ class HttpClientMock implements IHttpClient
 		}
 
 		return $response;
+	}
+
+
+
+	private function resolveTargetFile($method, $url, $headers, $body)
+	{
+		$parsedUrl = parse_url($url);
+		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+
+		list(,,, $resource, $action) = explode('/', $path);
+		$endpoint = $resource . '/' . $action;
+
+		switch ($endpoint) {
+			case 'payment/init':
+				$decodedBody = json_decode($body, TRUE);
+				return __DIR__ . '/api-data/init_' . $decodedBody['merchantId'] . '_' . $decodedBody['orderNo'] . '.json';
+
+			case 'payment/process':
+			case 'payment/status':
+			case 'payment/close':
+			case 'payment/reverse':
+			case 'payment/refund':
+				list(,,,,, $merchantId, $payId) = explode('/', $path);
+				return __DIR__ . '/api-data/' . $action . '_' . $merchantId . '_' . $payId . '.json';
+
+			case 'customer/info':
+				list(,,,,, $merchantId, $customerId) = explode('/', $path);
+				return __DIR__ . '/api-data/customer_' . $merchantId . '_' . $customerId . '.json';
+
+			case 'payment/400':
+			case 'payment/403':
+			case 'payment/404':
+			case 'payment/429':
+			case 'payment/503':
+				return __DIR__ . '/api-data/error_' . $action . '.json';
+
+			case 'payment/recurrent':
+			default:
+				throw new \LogicException(sprintf('Unexpected %s to endpoint %s', $method, $endpoint));
+		}
 	}
 
 }

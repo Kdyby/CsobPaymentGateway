@@ -1,0 +1,39 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 13 Nov 2015 12:40:31 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=pUk\/zQ5\/cbM8fYhztSMfRlE092AOeHNnAxwoIVQCLGocLraoeLpQdO1MbohPUyyqVKrDgan4MxPKUBsAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20151113134031",
+        "signature": "PDe9W6pBct3Xu\/zyF9yEpPKs+LXioazZOUt2Ez5lxJJMDoPIpv76GB+mukAo5tQAAYmhPGvptcoo3dJ+eJFw1lvgAZPIy5Qrd75IiPlW9IMqW2F+\/coabmYelx6RQOgi\/zDrOgAd9F3aVji7AVA7APnkeWzPTepcYR6HnSE2IDKLVOKK2Qgvw3fF8LNkswcBmCG17FE+ynXjsd6\/6RO2O5WKWp30QbGP0GicDNIzx6Zi\/BY5V9WvncxDB\/SR1EjLeWzlMYJsHHHP2IXRTxYL5YVmIuRFnIIKxYSaidmN6GRYUPrqV0e\/L+ErYj\/QwQt3Xt97817xn7kmp+BSXxOIDg==",
+        "payId": "merchantBlocked",
+        "resultCode": 120,
+        "resultMessage": "Merchant blocked"
+    }
+}

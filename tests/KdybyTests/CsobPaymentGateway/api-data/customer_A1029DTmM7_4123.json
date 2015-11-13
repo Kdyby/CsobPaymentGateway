@@ -1,0 +1,38 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 13 Nov 2015 11:54:55 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=l6HklPSG70lC9ehztSMfRlE092AOeE6WFcyio6DL7sN4D0n9YwGojxBfZq3KcJniLlDrhBXMO+JeESAAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20151113125455",
+        "signature": "PRExjwDNo\/dwYiUUk1AkXeQnJRAhyt2g2BMspnF6FTiUkY20P+Y\/ebWA9dToOeef+dV433uz\/3naJtLQhn8G+hAWghCuC9SElQS179CMGmESE6F7RdA56PUIUa9goFOFg5Ef\/2dYfdbvUzmFP4PEJhYOccIWpSw6xdaFsPYfzeCCJWA8XarjXG0rSgAaHU5mYXetkS5EaJjykDHxeptcQL4YPRIXUl4Mg5t3iIZVJ55YJmmnCzezJHp1nPeW+c8Iidj8HumnHuacL9f4R42rj\/DMMx4gMld56EwFi3hmj3Q4n0myxluIMD9uT7lui1ADKqkqEH8hbnNeVdyZTy5Vxw==",
+        "resultCode": 810,
+        "resultMessage": "Customer found, no saved card(s)"
+    }
+}

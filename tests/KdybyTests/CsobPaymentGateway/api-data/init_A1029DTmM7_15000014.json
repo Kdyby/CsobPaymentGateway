@@ -1,0 +1,40 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 13 Nov 2015 13:09:02 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=t9QGmiaWCsAKMMdztSMfRlE092AOeIJvXNDkAy2nSQsizGmzcdXNyJB5Xtup1ahfo7POXY6CjocdliQAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20151113140901",
+        "signature": "brQmiriOGlkaqHjB5l4\/hik4iNUTfUJ0WsYXUmWSTZtKKiVq1zB2RzcWMdec9yfF2HQLUmMgAL7e3TSB\/86lf72fDbIDjgSZCo8vYU9YuTkXhhqeX1RrK6WpOxKqKTPR7ILcv7NElBHOqsGdfmiM+l09yUUtqhI0qkDO6xWzPGjDlALBcekyDrQJ1lWsF\/5MsvmY1eAJB0WmqFT8ECLG3aC4lHqyLHE05D2Ow8ZSTbrpYNYXk1oOYVTBWi4iXdyxZCjYL2nKaBzKdg\/bSUR7MKjDWTIHnVlfDl5MRZtvsft7Ext7ZKoUVPCdNGpeVaHr9IsMiyLHzut8XeM0RDCCQA==",
+        "payId": "50ad3b79a2f3cAK",
+        "resultCode": 110,
+        "resultMessage": "Invalid returnMethod parameter, value not allowed",
+        "paymentStatus": 6
+    }
+}

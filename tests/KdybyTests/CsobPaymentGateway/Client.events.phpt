@@ -26,13 +26,8 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @author Jiří Pudil <me@jiripudil.cz>
  */
-class ClientEventsTest extends Tester\TestCase
+class ClientEventsTest extends CsobTestCase
 {
-
-	/**
-	 * @var Client
-	 */
-	private $client;
 
 	private $onRequestCalled;
 	private $onResponseCalled;
@@ -43,15 +38,6 @@ class ClientEventsTest extends Tester\TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-		$this->client = new Client(
-			new Configuration('A1029DTmM7', 'Test shop'),
-			new Signature(
-				new PrivateKey(__DIR__ . '/../../../examples/keys/rsa_A1029DTmM7.key', NULL),
-				new PublicKey(Configuration::getCsobSandboxCertPath())
-			),
-			new HttpClientMock()
-		);
-
 		$this->onRequestCalled = $this->onResponseCalled = $this->onErrorCalled = FALSE;
 
 		$this->client->onRequest[] = function (Request $request) {
@@ -93,13 +79,6 @@ class ClientEventsTest extends Tester\TestCase
 		Assert::true($this->onRequestCalled);
 		Assert::false($this->onResponseCalled);
 		Assert::true($this->onErrorCalled);
-	}
-
-
-
-	protected function tearDown()
-	{
-		\Mockery::close();
 	}
 
 }
