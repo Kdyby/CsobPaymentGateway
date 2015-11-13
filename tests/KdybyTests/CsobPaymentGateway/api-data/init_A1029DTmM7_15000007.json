@@ -1,0 +1,40 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 13 Nov 2015 13:09:01 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=MzAbq1DpttxUjGNztSMfRlE092AOePtxaWU1qdYKL7FJVwbMgMJJ1lFX90rNVlblPn5QaIyFTX5TQgMAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20151113140901",
+        "signature": "D77hTMbraz7vnafvNv0gDp8UpdU3wSXnc5ohV19i6eYXXxwVB2+GtJyBNR6caZZgj4vjkkmVMnuJ\/S0eOqZE\/+M3oOTN62eUEy2xrhj5FlPojNji7mf8IdWVgQJKj3R0Um8BRWg\/IbZE\/NTnb27j+CGg7RHvsmh2CRgVHMdzpqbIGkThuGdFYWyZTlgUmmlKyrMhrgK2fVcnZt0Ni\/CPlZVF4HsGl1clyCEaim1pe3DNgUt8oOZrh0ZNcwj85jQeJNY5V0V6KDpkHw+LzL3TvkvJDdS\/CfYPxjjnYDnQMEzlCsan+jCbVeV4WEz0yGQk0zP5INrdpGrMMUEzDFQqRw==",
+        "payId": "10550efec394cAK",
+        "resultCode": 110,
+        "resultMessage": "Invalid format of dttm parameter",
+        "paymentStatus": 6
+    }
+}
