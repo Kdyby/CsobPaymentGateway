@@ -373,6 +373,8 @@ class Client
 					throw PaymentNotFoundException::fromResponse($decoded, $response);
 				case PaymentException::PAYMENT_NOT_IN_VALID_STATE:
 					throw PaymentNotInValidStateException::fromResponse($decoded, $response);
+				case PaymentException::OPERATION_NOT_ALLOWED:
+					throw OperationNotAllowedException::fromResponse($decoded, $response);
 			}
 
 			$this->handleInvalidPaymentStatus($response);

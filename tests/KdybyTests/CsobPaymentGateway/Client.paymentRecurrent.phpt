@@ -8,11 +8,8 @@
 
 namespace KdybyTests\CsobPaymentGateway;
 
-use Kdyby\CsobPaymentGateway\Client;
-use Kdyby\CsobPaymentGateway\Configuration;
 use Kdyby\CsobPaymentGateway\InvalidParameterException;
-use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
-use Kdyby\CsobPaymentGateway\Message\Signature;
+use Kdyby\CsobPaymentGateway\OperationNotAllowedException;
 use Kdyby\CsobPaymentGateway\Payment;
 use Kdyby\CsobPaymentGateway\PaymentNotFoundException;
 use Kdyby\CsobPaymentGateway\PaymentNotInValidStateException;
@@ -82,7 +79,7 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 	public function testPaymentRecurrentNotATemplate()
 	{
 		$payment = $this->client->createPayment(15000001)
-			->setOriginalPayId('nonExistentId')
+			->setOriginalPayId('912aeb8706eceAK')
 			->setDescription('Test payment')
 			->setReturnUrl('https://kdyby.org/process-payment-response')
 			->addCartItem('Test item 1', 42 * 100, 1)
@@ -90,7 +87,7 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 
 		Assert::throws(function () use ($payment) {
 			$this->client->paymentRecurrent($payment);
-		}, PaymentNotFoundException::class, 'orig payment not found');
+		}, OperationNotAllowedException::class, 'orig payment not recurrent payment template');
 	}
 
 
