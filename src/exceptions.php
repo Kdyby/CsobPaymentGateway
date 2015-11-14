@@ -115,6 +115,7 @@ class PaymentException extends \RuntimeException implements Exception, Exception
 	const SESSION_EXPIRED = 130; // vypršela platnost požadavku
 	const PAYMENT_NOT_FOUND = 140; // platba nenalezena
 	const PAYMENT_NOT_IN_VALID_STATE = 150; // nesprávný stav platby, operaci nelze provést
+	const OPERATION_NOT_ALLOWED = 180; // nepovolená operace
 	const CUSTOMER_NOT_FOUND = 800; // zákazník identifikovaný pomocí customerId nenalezen
 	const CUSTOMER_HAS_NO_SAVED_CARDS = 810;
 	const CUSTOMER_FOUND_SAVED_CARDS = 820;
@@ -203,6 +204,13 @@ class PaymentNotFoundException extends PaymentException
 
 
 class PaymentNotInValidStateException extends PaymentException
+{
+
+}
+
+
+
+class OperationNotAllowedException extends PaymentException
 {
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Payment
+ * Payment: toArray()
  *
  * @testCase
  */
@@ -13,8 +13,6 @@ use Kdyby\CsobPaymentGateway\Payment;
 use Tester;
 use Tester\Assert;
 
-
-
 require_once __DIR__ . '/../bootstrap.php';
 
 
@@ -22,7 +20,7 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @author Jiří Pudil <me@jiripudil.cz>
  */
-class PaymentTest extends Tester\TestCase
+class PaymentToArrayTest extends Tester\TestCase
 {
 
 	public function testPayment()
@@ -103,12 +101,12 @@ class PaymentTest extends Tester\TestCase
 
 	public function testEmptyCart()
 	{
-		Assert::throws(function () {
-			$payment = new Payment('A1029DTmM7', 15000001);
-			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
-			$payment->setDescription('Test payment');
-			$payment->setReturnUrl('https://example.com/process-payment-response');
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
 
+		Assert::throws(function () use ($payment) {
 			$payment->toArray();
 		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'The cart must contain at least one item.');
 	}
@@ -117,14 +115,14 @@ class PaymentTest extends Tester\TestCase
 
 	public function testEmptyReturnUrl()
 	{
-		Assert::throws(function () {
-			$payment = new Payment('A1029DTmM7', 15000001);
-			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
-			$payment->setDescription('Test payment');
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
 
-			$payment->addCartItem('Test item 1', 4200, 1);
-			$payment->addCartItem('Test item 2', 15800, 2);
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
 
+		Assert::throws(function () use ($payment) {
 			$payment->toArray();
 		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'The returnUrl is required.');
 	}
@@ -133,14 +131,14 @@ class PaymentTest extends Tester\TestCase
 
 	public function testEmptyDescription()
 	{
-		Assert::throws(function () {
-			$payment = new Payment('A1029DTmM7', 15000001);
-			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
-			$payment->setReturnUrl('https://example.com/process-payment-response');
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setReturnUrl('https://example.com/process-payment-response');
 
-			$payment->addCartItem('Test item 1', 4200, 1);
-			$payment->addCartItem('Test item 2', 15800, 2);
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
 
+		Assert::throws(function () use ($payment) {
 			$payment->toArray();
 		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'The description is required.');
 	}
@@ -149,17 +147,36 @@ class PaymentTest extends Tester\TestCase
 
 	public function testEmptyOrderNo()
 	{
-		Assert::throws(function () {
-			$payment = new Payment('A1029DTmM7');
-			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
-			$payment->setDescription('Test payment');
-			$payment->setReturnUrl('https://example.com/process-payment-response');
+		$payment = new Payment('A1029DTmM7');
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
 
-			$payment->addCartItem('Test item 1', 4200, 1);
-			$payment->addCartItem('Test item 2', 15800, 2);
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
 
+		Assert::throws(function () use ($payment) {
 			$payment->toArray();
 		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'The orderNo is required.');
+	}
+
+
+
+	public function testPaymentMerchantDataTooLong()
+	{
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
+
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
+
+		$payment->setMerchantData($merchantData = str_repeat('foo', 1e6));
+
+		Assert::throws(function () use ($payment) {
+			$payment->toArray();
+		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'Merchant data cannot be longer than 255 characters after base64 encoding.');
 	}
 
 
@@ -213,15 +230,15 @@ class PaymentTest extends Tester\TestCase
 
 	public function testRecurrentEmptyOrderNo()
 	{
-		Assert::throws(function () {
-			$payment = new Payment('A1029DTmM7');
-			$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
-			$payment->setDescription('Test payment');
-			$payment->setReturnUrl('https://example.com/process-payment-response');
+		$payment = new Payment('A1029DTmM7');
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
 
-			$payment->setPayOperation($payment::OPERATION_PAYMENT_RECURRENT);
-			$payment->setOriginalPayId(15000001);
+		$payment->setPayOperation($payment::OPERATION_PAYMENT_RECURRENT);
+		$payment->setOriginalPayId(15000001);
 
+		Assert::throws(function () use ($payment) {
 			$payment->toArray();
 		}, Kdyby\CsobPaymentGateway\UnexpectedValueException::class, 'The orderNo is required.');
 	}
@@ -230,4 +247,4 @@ class PaymentTest extends Tester\TestCase
 
 
 
-\run(new PaymentTest());
+\run(new PaymentToArrayTest());

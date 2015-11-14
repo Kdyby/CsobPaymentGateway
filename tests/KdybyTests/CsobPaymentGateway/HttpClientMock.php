@@ -80,11 +80,18 @@ class HttpClientMock implements IHttpClient
 				$decodedBody = json_decode($body, TRUE);
 				return __DIR__ . '/api-data/init_' . $decodedBody['merchantId'] . '_' . $decodedBody['orderNo'] . '.json';
 
-			case 'payment/process':
-			case 'payment/status':
+			case 'payment/recurrent':
+				$decodedBody = json_decode($body, TRUE);
+				return __DIR__ . '/api-data/recurrent_' . $decodedBody['merchantId'] . '_' . $decodedBody['origPayId'] . '.json';
+
 			case 'payment/close':
 			case 'payment/reverse':
 			case 'payment/refund':
+				$decodedBody = json_decode($body, TRUE);
+				return __DIR__ . '/api-data/' . $action . '_' . $decodedBody['merchantId'] . '_' . $decodedBody['payId'] . '.json';
+
+			case 'payment/process':
+			case 'payment/status':
 				list(,,,,, $merchantId, $payId) = explode('/', $path);
 				return __DIR__ . '/api-data/' . $action . '_' . $merchantId . '_' . $payId . '.json';
 
@@ -99,7 +106,6 @@ class HttpClientMock implements IHttpClient
 			case 'payment/503':
 				return __DIR__ . '/api-data/error_' . $action . '.json';
 
-			case 'payment/recurrent':
 			default:
 				throw new \LogicException(sprintf('Unexpected %s to endpoint %s', $method, $endpoint));
 		}

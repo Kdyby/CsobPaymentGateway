@@ -354,7 +354,7 @@ class Payment
 	public function setDescription($description)
 	{
 		if (strlen($description) > 255) {
-			throw new UnexpectedValueException('The description cannot be longer than 255 characters.');
+			throw new InvalidArgumentException('The description cannot be longer than 255 characters.');
 		}
 
 		$this->description = $description;
@@ -382,7 +382,7 @@ class Payment
 	public function setCustomerId($customerId)
 	{
 		if (strlen($customerId) > 50) {
-			throw new UnexpectedValueException('The customer id cannot be longer than 50 characters.');
+			throw new InvalidArgumentException('The customer id cannot be longer than 50 characters.');
 		}
 
 		$this->customerId = $customerId;
