@@ -8,6 +8,7 @@
 
 namespace KdybyTests\CsobPaymentGateway;
 
+use Kdyby\CsobPaymentGateway\InternalErrorException;
 use Kdyby\CsobPaymentGateway\Payment;
 use Kdyby\CsobPaymentGateway\PaymentCanceledException;
 use Kdyby\CsobPaymentGateway\PaymentDeclinedException;
@@ -100,6 +101,24 @@ class ClientReceiveResponseTest extends CsobTestCase
 		Assert::throws(function () use ($returnData) {
 			$this->client->receiveResponse($returnData);
 		}, PaymentDeclinedException::class, 'OK');
+	}
+
+
+
+	public function testReceiveResponseInternalError()
+	{
+		$returnData = [
+			'payId' => 'fb425174783f9AK',
+			'dttm' => '20151109153917',
+			'resultCode' => 900,
+			'resultMessage' => 'Internal error',
+			'paymentStatus' => Payment::STATUS_REQUESTED,
+			'signature' => 'signature',
+		];
+
+		Assert::throws(function () use ($returnData) {
+			$this->client->receiveResponse($returnData);
+		}, InternalErrorException::class, 'Internal error');
 	}
 
 }

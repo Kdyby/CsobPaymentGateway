@@ -302,7 +302,19 @@ class Client
 			$this->logger->info('payment/process', ['response' => $logParams]);
 		}
 
+		if ($data['resultCode'] === PaymentException::INTERNAL_ERROR) {
+			throw InternalErrorException::fromResponse($data, $response);
+		}
+
+		if (empty($data['signature'])) {
+			throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', json_encode($data)));
+		}
+
 		$response->verify($this->signature);
+
+		if ($data['resultCode'] === PaymentException::SESSION_EXPIRED) {
+			throw SessionExpiredException::fromResponse($data, $response);
+		}
 
 		$this->handleInvalidPaymentStatus($response);
 
