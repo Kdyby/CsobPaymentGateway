@@ -30,9 +30,9 @@ class ClientReceiveResponseTest extends CsobTestCase
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
 			'dttm' => '20151109153917',
-			'resultCode' => 0,
+			'resultCode' => '0',
 			'resultMessage' => 'OK',
-			'paymentStatus' => Payment::STATUS_TO_CLEARING,
+			'paymentStatus' => (string) Payment::STATUS_TO_CLEARING,
 			'signature' => 'signature',
 			'authCode' => '637413',
 		];
@@ -52,9 +52,9 @@ class ClientReceiveResponseTest extends CsobTestCase
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
 			'dttm' => '20151109153917',
-			'resultCode' => 0,
+			'resultCode' => '0',
 			'resultMessage' => 'OK',
-			'paymentStatus' => Payment::STATUS_APPROVED,
+			'paymentStatus' => (string) Payment::STATUS_APPROVED,
 			'signature' => 'signature',
 			'authCode' => '637413',
 		];
@@ -74,9 +74,9 @@ class ClientReceiveResponseTest extends CsobTestCase
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
 			'dttm' => '20151109153917',
-			'resultCode' => 0,
+			'resultCode' => '0',
 			'resultMessage' => 'OK',
-			'paymentStatus' => Payment::STATUS_CANCELED,
+			'paymentStatus' => (string) Payment::STATUS_CANCELED,
 			'signature' => 'signature',
 		];
 
@@ -92,9 +92,9 @@ class ClientReceiveResponseTest extends CsobTestCase
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
 			'dttm' => '20151109153917',
-			'resultCode' => 0,
+			'resultCode' => '0',
 			'resultMessage' => 'OK',
-			'paymentStatus' => Payment::STATUS_DECLINED,
+			'paymentStatus' => (string) Payment::STATUS_DECLINED,
 			'signature' => 'signature',
 		];
 
@@ -110,9 +110,9 @@ class ClientReceiveResponseTest extends CsobTestCase
 		$returnData = [
 			'payId' => 'fb425174783f9AK',
 			'dttm' => '20151109153917',
-			'resultCode' => 900,
+			'resultCode' => '900',
 			'resultMessage' => 'Internal error',
-			'paymentStatus' => Payment::STATUS_REQUESTED,
+			'paymentStatus' => (string) Payment::STATUS_REQUESTED,
 			'signature' => 'signature',
 		];
 

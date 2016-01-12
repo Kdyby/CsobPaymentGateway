@@ -302,7 +302,7 @@ class Client
 			$this->logger->info('payment/process', ['response' => $logParams]);
 		}
 
-		if ($data['resultCode'] === PaymentException::INTERNAL_ERROR) {
+		if ((int) $data['resultCode'] === PaymentException::INTERNAL_ERROR) {
 			throw InternalErrorException::fromResponse($data, $response);
 		}
 
@@ -312,7 +312,7 @@ class Client
 
 		$response->verify($this->signature);
 
-		if ($data['resultCode'] === PaymentException::SESSION_EXPIRED) {
+		if ((int) $data['resultCode'] === PaymentException::SESSION_EXPIRED) {
 			throw SessionExpiredException::fromResponse($data, $response);
 		}
 
