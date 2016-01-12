@@ -10,7 +10,7 @@ Kdyby/CsobPaymentGateway
 Requirements
 ------------
 
-Kdyby/CsobPaymentGateway requires PHP 5.4.
+Kdyby/CsobPaymentGateway requires PHP 5.5.
 
 
 Installation
