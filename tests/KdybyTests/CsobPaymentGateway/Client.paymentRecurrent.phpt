@@ -122,7 +122,7 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 
 		Assert::throws(function () use ($payment) {
 			$this->client->paymentRecurrent($payment);
-		}, NotSupportedException::class, 'payment/recurrent is only supported in eAPI v1.5');
+		}, NotSupportedException::class, 'payment/recurrent is not supported in currently used eAPI version');
 	}
 
 }

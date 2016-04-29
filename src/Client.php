@@ -237,6 +237,26 @@ class Client
 
 
 	/**
+	 * @return bool
+	 */
+	public function isRecurrentPaymentSupported()
+	{
+		return $this->config->getVersion() === Configuration::VERSION_1_5;
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isOneclickPaymentSupported()
+	{
+		return !$this->isRecurrentPaymentSupported();
+	}
+
+
+
+	/**
 	 * @param Payment $payment
 	 * @return Message\Response
 	 */
@@ -246,8 +266,8 @@ class Client
 			throw new InvalidArgumentException('The origPayId is required for recurrent payment.');
 		}
 
-		if ($this->config->getVersion() !== Configuration::VERSION_1_5) {
-			throw new NotSupportedException('payment/recurrent is only supported in eAPI v1.5');
+		if (!$this->isRecurrentPaymentSupported()) {
+			throw new NotSupportedException('payment/recurrent is not supported in currently used eAPI version');
 		}
 
 		$data = $payment->toArray();
@@ -268,8 +288,8 @@ class Client
 			throw new InvalidArgumentException('The origPayId is required for oneclick payment.');
 		}
 
-		if ($this->config->getVersion() === Configuration::VERSION_1_5) {
-			throw new NotSupportedException('payment/oneclick is only supported in eAPI since v1.6');
+		if (!$this->isOneclickPaymentSupported()) {
+			throw new NotSupportedException('payment/oneclick is not supported in currently used eAPI version');
 		}
 
 		$data = $payment->toArray();
@@ -286,8 +306,8 @@ class Client
 	 */
 	public function paymentOneclickStart($paymentId)
 	{
-		if ($this->config->getVersion() === Configuration::VERSION_1_5) {
-			throw new NotSupportedException('payment/oneclick is only supported in eAPI since v1.6');
+		if (!$this->isOneclickPaymentSupported()) {
+			throw new NotSupportedException('payment/oneclick is not supported in currently used eAPI version');
 		}
 
 		$data = [

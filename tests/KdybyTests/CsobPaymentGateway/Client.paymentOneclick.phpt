@@ -119,7 +119,7 @@ class ClientPaymentOneclickTest extends CsobTestCase
 
 		Assert::throws(function () use ($payment) {
 			$this->client->paymentOneclickInit($payment);
-		}, NotSupportedException::class, 'payment/oneclick is only supported in eAPI since v1.6');
+		}, NotSupportedException::class, 'payment/oneclick is not supported in currently used eAPI version');
 	}
 
 }
