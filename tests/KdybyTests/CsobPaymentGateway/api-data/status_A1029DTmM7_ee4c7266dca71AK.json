@@ -5,7 +5,7 @@
             "nginx"
         ],
         "Date": [
-            "Thu, 12 Nov 2015 12:43:58 GMT"
+            "Fri, 29 Apr 2016 12:48:41 GMT"
         ],
         "Content-Type": [
             "application\/json;charset=UTF-8"
@@ -26,15 +26,23 @@
             "no-cache"
         ],
         "Set-Cookie": [
-            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=E44iQqtggMgHMFdztSMfRlE092AOeFxX2ZNILTqpXPDEX457RObv3nrqP2nObAQ\/XkfywXW\/njTXDFUAAAAB;secure; path=\/"
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=XUIg377\/mydVCMfjBKM\/0wuNmVa8y7Jaa6cxmRxMk++Wc4tRbAXJmH8AqNlEbuvPYpm3qKFakpxCewMAAAAB;secure; path=\/"
         ]
     },
     "body": {
-        "dttm": "20151112134358",
-        "signature": "qraOG01lNZeuSaoFfiBwjqViF2TAAs9AHLtXl2wi3vS0U2UgzKcdkChLp6LI6C6g\/3GV+yWRWi7csWeo87IMVp\/NHZxo3q2YPnNHyWVyI9doRsNMnU3YYcOTc\/o+DnlAV64j62LjPJIda8lrv6rYPaED2B\/olYzMJpBL7rr8jViu8ki6gRc4pshOTdpHOLCIW\/A3B6r3MmaZ7xi5asuI+FkRcnIy46\/aw2uqtqSuY7EuUqyBYaS9Gz1xHjnSrpe5Q5Y9lN8fTHIa3dfMGVEAGlH8iCipLxiioamV\/n4TWxtvukkEjKoY2HuiDZEkLJXE5\/RZUf2Lm6HpuzM+hCNffQ==",
+        "dttm": "20160429144841",
+        "signature": "lk2ZTm3GLa0ha0lGKag5WfH3YdwSjItxEe87CZFk28h4A+h4eDKo02Jn9o0WPCC84h84kMA1yni2TevaU0JcVRCfjqUUSMGQZXgIItPF2r+PvhnobOG0UiBxGkCheCr7TdSdZTQYVmIrqSyGUeNUufcFKJ41xpwALci7lvfgF4E91YztX\/j8kAoYU9r7bP41DpnslV+7dM1ZcncTVOwUGr\/BzSm2Og7IQe\/XxYrJQrxbwpLMQXv2IFvPXR07fnD5fv1ZwqzoRCDIjZrTthLgAT95yz263Woz+KQqMyDMQmnSY\/t4ooEND82MSLWAblPj\/m4RUOrZKBcKMVxvVAB05Q==",
         "payId": "ee4c7266dca71AK",
         "resultCode": 0,
         "resultMessage": "OK",
-        "paymentStatus": 1
+        "paymentStatus": 1,
+        "extensions": [
+            {
+                "dttm": "20160429144841",
+                "signature": "S93rULIRplMkbfg1736Dn3Ezb2hUGVEPW3Bo5j8aVqH4WgGcHk6R6gUo4DAzjQTXk+uix2v3uSczHcB0Eo+g1uzIYOQs5MWZhjEGuWHxgasTHYVhrRVa9eYp\/stkhjHqnRVBwQYEZg+ADMy6Wn7CCSzvFhHXBxTrVRnOT9qDgktLDB0ikTFn0ffkSe35zkOM06nA2BhwQ0g6QHnx27KuJ8K0RPcb75LrP\/mHAkZqWBtILiMOMdynUJAT3HDCe4c7cBUGUryZem4GBpxsmdCds3P48e8uYIBlQ6fsHEgJw9EW0OB50hXXb+YHMA0k6Z+OqGpCzT8J7GGcrw86YRwx6A==",
+                "extension": "trxDates",
+                "createdDate": "2015-11-12T13:42:37.793Z"
+            }
+        ]
     }
 }
