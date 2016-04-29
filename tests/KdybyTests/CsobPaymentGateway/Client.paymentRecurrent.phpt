@@ -94,8 +94,6 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 
 	public function testPaymentRecurrentExceedsOriginalAmount()
 	{
-		Tester\Environment::skip('Not yet sure how it should work');
-
 		$payment = $this->client->createPayment(15000001)
 			->setOriginalPayId('6a37894a1f822AK')
 			->setDescription('Test payment')

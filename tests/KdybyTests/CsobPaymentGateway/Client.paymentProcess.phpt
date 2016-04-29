@@ -8,12 +8,8 @@
 
 namespace KdybyTests\CsobPaymentGateway;
 
-use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
-use Kdyby\CsobPaymentGateway\Http\GuzzleClient;
-use Kdyby\CsobPaymentGateway\InvalidParameterException;
 use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
-use Kdyby\CsobPaymentGateway\Message\Signature;
 use Kdyby\CsobPaymentGateway\Payment;
 use Tester;
 use Tester\Assert;
@@ -44,7 +40,7 @@ class ClientPaymentProcessTest extends CsobTestCase
 
 		$processResponse = $this->client->paymentProcess($response->getPayId());
 		Assert::type(RedirectResponse::class, $processResponse);
-		Assert::match(Configuration::DEFAULT_SANDBOX_URL . '/payment/process/%A%', $processResponse->getUrl());
+		Assert::match(Configuration::DEFAULT_SANDBOX_URL . '/v%a%/payment/process/%A%', $processResponse->getUrl());
 	}
 
 }

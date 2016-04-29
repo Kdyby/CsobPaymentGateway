@@ -5,6 +5,7 @@ This extension provides a client library for ČSOB Payment Gateway.
 
 - [CSOB payment gateway wiki](https://github.com/csob/paymentgateway/wiki)
 - [CSOB eAPI 1.5](https://github.com/csob/paymentgateway/wiki/eAPI-1.5)
+- [CSOB eAPI 1.6](https://github.com/csob/paymentgateway/wiki/eAPI-1.6)
 
 
 Installation
