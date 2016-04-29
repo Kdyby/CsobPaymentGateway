@@ -54,6 +54,9 @@ class Signature
 		'merchantData',
 		'customerId',
 		'language',
+		'ttlSec',
+		'logoVersion',
+		'colorSchemeVersion',
 	];
 
 	/**
