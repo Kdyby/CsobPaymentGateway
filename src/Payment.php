@@ -34,6 +34,7 @@ class Payment
 
 	const OPERATION_PAYMENT = 'payment';
 	const OPERATION_PAYMENT_RECURRENT = 'recurrentPayment';
+	const OPERATION_PAYMENT_ONECLICK = 'oneclickPayment';
 
 	const PAY_METHOD_CARD = 'card';
 
@@ -311,7 +312,7 @@ class Payment
 	 */
 	public function setPayOperation($payOperation)
 	{
-		if (!in_array($payOperation, [self::OPERATION_PAYMENT, self::OPERATION_PAYMENT_RECURRENT], TRUE)) {
+		if (!in_array($payOperation, [self::OPERATION_PAYMENT, self::OPERATION_PAYMENT_RECURRENT, self::OPERATION_PAYMENT_ONECLICK], TRUE)) {
 			throw new InvalidArgumentException('Only Payment::OPERATION_* constants are allowed');
 		}
 

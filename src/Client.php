@@ -246,10 +246,57 @@ class Client
 			throw new InvalidArgumentException('The origPayId is required for recurrent payment.');
 		}
 
+		if ($this->config->getVersion() !== Configuration::VERSION_1_5) {
+			throw new NotSupportedException('payment/recurrent is only supported in eAPI v1.5');
+		}
+
 		$data = $payment->toArray();
 		$data['signature'] = $this->signature->signPayment($data);
 
 		return $this->processRequest(Message\Request::paymentRecurrent($data));
+	}
+
+
+
+	/**
+	 * @param Payment $payment
+	 * @return Message\Response
+	 */
+	public function paymentOneclickInit(Payment $payment)
+	{
+		if (!$payment->getOriginalPayId()) {
+			throw new InvalidArgumentException('The origPayId is required for oneclick payment.');
+		}
+
+		if ($this->config->getVersion() === Configuration::VERSION_1_5) {
+			throw new NotSupportedException('payment/oneclick is only supported in eAPI since v1.6');
+		}
+
+		$data = $payment->toArray();
+		$data['signature'] = $this->signature->signPayment($data);
+
+		return $this->processRequest(Message\Request::paymentOneclickInit($data));
+	}
+
+
+
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
+	public function paymentOneclickStart($paymentId)
+	{
+		if ($this->config->getVersion() === Configuration::VERSION_1_5) {
+			throw new NotSupportedException('payment/oneclick is only supported in eAPI since v1.6');
+		}
+
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'payId' => $paymentId,
+			'dttm' => $this->formatDatetime(),
+		];
+
+		return $this->processRequest(Message\Request::paymentOneclickStart($data));
 	}
 
 

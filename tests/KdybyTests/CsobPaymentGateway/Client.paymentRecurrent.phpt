@@ -8,7 +8,9 @@
 
 namespace KdybyTests\CsobPaymentGateway;
 
+use Kdyby\CsobPaymentGateway\Configuration;
 use Kdyby\CsobPaymentGateway\InvalidParameterException;
+use Kdyby\CsobPaymentGateway\NotSupportedException;
 use Kdyby\CsobPaymentGateway\OperationNotAllowedException;
 use Kdyby\CsobPaymentGateway\Payment;
 use Kdyby\CsobPaymentGateway\PaymentNotFoundException;
@@ -104,6 +106,23 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 		Assert::throws(function () use ($payment) {
 			$this->client->paymentRecurrent($payment);
 		}, InvalidParameterException::class, 'payment/recurrent amount exceeds origin payment amount');
+	}
+
+
+
+	public function testPaymentRecurrentNotSupportedIn16()
+	{
+		$this->configuration->setVersion(Configuration::VERSION_1_6);
+		$payment = $this->client->createPayment(15000001)
+			->setOriginalPayId('52b7b2f93846fBD')
+			->setDescription('Test payment')
+			->setReturnUrl('https://kdyby.org/process-payment-response')
+			->addCartItem('Test item 1', 42 * 100, 1)
+			->addCartItem('Test item 2', 158 * 100, 2);
+
+		Assert::throws(function () use ($payment) {
+			$this->client->paymentRecurrent($payment);
+		}, NotSupportedException::class, 'payment/recurrent is only supported in eAPI v1.5');
 	}
 
 }

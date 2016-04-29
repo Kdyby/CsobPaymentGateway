@@ -74,15 +74,21 @@ class HttpClientMock implements IHttpClient
 
 		list(,,, $resource, $action) = explode('/', $path);
 		$endpoint = $resource . '/' . $action;
+		$decodedBody = json_decode($body, TRUE);
 
 		switch ($endpoint) {
 			case 'payment/init':
-				$decodedBody = json_decode($body, TRUE);
 				return __DIR__ . '/api-data/init_' . $decodedBody['merchantId'] . '_' . $decodedBody['orderNo'] . '.json';
 
 			case 'payment/recurrent':
-				$decodedBody = json_decode($body, TRUE);
 				return __DIR__ . '/api-data/recurrent_' . $decodedBody['merchantId'] . '_' . $decodedBody['origPayId'] . '.json';
+
+			case 'payment/oneclick':
+				if (explode('/', $path)[5] === 'init') {
+					return __DIR__ . '/api-data/oneclickInit_' . $decodedBody['merchantId'] . '_' . $decodedBody['origPayId'] . '.json';
+				} else {
+					return __DIR__ . '/api-data/oneclickStart_' . $decodedBody['merchantId'] . '_' . $decodedBody['payId'] . '.json';
+				}
 
 			case 'payment/close':
 			case 'payment/reverse':

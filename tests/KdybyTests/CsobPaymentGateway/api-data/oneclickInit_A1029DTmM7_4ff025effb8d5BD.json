@@ -1,0 +1,46 @@
+{
+	"status": 200,
+	"headers": {
+		"Server": [
+			"nginx"
+		],
+		"Date": [
+			"Fri, 29 Apr 2016 11:57:32 GMT"
+		],
+		"Content-Type": [
+			"application\/json;charset=UTF-8"
+		],
+		"Transfer-Encoding": [
+			"chunked"
+		],
+		"Connection": [
+			"keep-alive"
+		],
+		"Cache-Control": [
+			"no-cache, no-store, must-revalidate"
+		],
+		"Expires": [
+			"0"
+		],
+		"Pragma": [
+			"no-cache"
+		],
+		"Set-Cookie": [
+			"BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=HTD8uGngvI9zIPdztSMfRlE092AOeDk5Y72UIwElYBjkrNCRsehkXeQtmfa0mIBHm\/TGMO9iZ3fM3bAAAAAB;secure; path=\/"
+		]
+	},
+	"body": {
+		"payId": "2e02060639547BD",
+		"dttm": {
+			"date": "2016-04-29 13:57:32.000000",
+			"timezone_type": 3,
+			"timezone": "UTC"
+		},
+		"resultCode": 0,
+		"resultMessage": "OK",
+		"paymentStatus": 1,
+		"authCode": null,
+		"merchantData": null,
+		"signature": "oDEtqVUNaOj1U4aZSoGW80j7VcGS4wdgiJ6cvmItQ9/tTyuPzuG77HEor3IRm0WoK5xRoFCnjV6B3Ot/kA8kAk04x4mAukZva482It2bNqbVn/iFy9NW7D9JT2B3yg0EBKNjWVE78qbPFlEbfig/Ko68aqdJplgksknDsRmwxh3GLBaq3z7ARhik65Fplz5s+Zf1ZOK+038jWlKzasTytYUIjomIk/7fBfd7eOG11kmdJbT9TnaenA3RFJz0znIEJeSbMPp9KyQZdv/85T16EzDNQ9UYHDKGu5DcCHvljurWsPB0Fyj4i4bvfpM0gAvWo64v23igBtSIMxIk8i/kQg=="
+	}
+}
