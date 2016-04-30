@@ -38,5 +38,10 @@
 	},
 	"autoload-dev": {
 		"classmap": ["tests/KdybyTests"]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0-dev"
+		}
 	}
 }
