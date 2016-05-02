@@ -1,0 +1,39 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 29 Apr 2016 12:21:19 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=wd2IhgSiET5X9z\/jBKM\/0wuNmVa8yw+ipW\/7INbkptfjpThn6V1PrOqKoVqfshhoyVlHt5Jirq97eTMAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm": "20160429142119",
+        "signature": "N2dEcL\/Y9a01V9UsO\/UJp3l9qRwuIcKKa82uyA8A1LaxCkj5h4BokBbjgnX7cngNIYKf2dzzhLjc5uQyDFmFVMeRW+DfBtsKNVHvkKjtRhTWCc1v\/FgmXFm3dEDzFjx4wmKICTs2dOLca2aDFJ\/l2YFt4d5C7QN4rC3dxcoOK8j4k1sdGqZ13y\/xb\/7CVZNw26VS1a19MHn1a3N+DucvgeqRJkxD4ZyiG\/7QILxrMyUwrzy9GTuwiaxbYm0qbKFYhIhU7YTogwgkypLiN7iMGH+4+Xw7qiyAOwAoE4BUCFEqzcsDWvLcpTPKDwx6jMRo87hjSKwjkSFRRWL0\/9+7Jg==",
+        "payId": "30a25b22abb9bBD",
+        "resultCode": 180,
+        "resultMessage": "orig payment not oneclick payment template"
+    }
+}

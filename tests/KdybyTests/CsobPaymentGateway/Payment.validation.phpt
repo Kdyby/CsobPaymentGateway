@@ -77,6 +77,17 @@ class PaymentValidationTest extends Tester\TestCase
 			$payment = new Payment('A1029DTmM7', 15000001);
 			$payment->setLanguage('ES');
 		}, Kdyby\CsobPaymentGateway\InvalidArgumentException::class, 'Only Payment::LANGUAGE_* constants are allowed');
+
+		// ttlSec
+		Assert::throws(function () {
+			$payment = new Payment('A1029DTmM7', 15000001);
+			$payment->setTtlSec(200);
+		}, Kdyby\CsobPaymentGateway\InvalidArgumentException::class, 'The TTL has to be a numeric value between 300 and 1800');
+
+		Assert::throws(function () {
+			$payment = new Payment('A1029DTmM7', 15000001);
+			$payment->setTtlSec(2000);
+		}, Kdyby\CsobPaymentGateway\InvalidArgumentException::class, 'The TTL has to be a numeric value between 300 and 1800');
 	}
 
 

@@ -20,8 +20,11 @@ namespace Kdyby\CsobPaymentGateway;
 class Configuration
 {
 
-	const DEFAULT_SANDBOX_URL = 'https://iapi.iplatebnibrana.csob.cz/api/v1.5';
-	const DEFAULT_PRODUCTION_URL = 'https://api.platebnibrana.csob.cz/api/v1.5';
+	const VERSION_1_5 = '1.5';
+	const VERSION_1_6 = '1.6';
+
+	const DEFAULT_SANDBOX_URL = 'https://iapi.iplatebnibrana.csob.cz/api';
+	const DEFAULT_PRODUCTION_URL = 'https://api.platebnibrana.csob.cz/api';
 
 	CONST DEFAULT_CSOB_SANDBOX_CERT = 'mips_iplatebnibrana.csob.cz.pub';
 	CONST DEFAULT_CSOB_PRODUCTION_CERT = 'mips_platebnibrana.csob.cz.pub';
@@ -30,6 +33,11 @@ class Configuration
 	 * @var string
 	 */
 	private $url = self::DEFAULT_SANDBOX_URL;
+
+	/**
+	 * @var string
+	 */
+	private $version = self::VERSION_1_5;
 
 	/**
 	 * @var string
@@ -71,6 +79,16 @@ class Configuration
 	public function getUrl()
 	{
 		return $this->url;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function buildUrl()
+	{
+		return $this->url . '/v' . $this->version;
 	}
 
 
@@ -150,6 +168,32 @@ class Configuration
 		}
 
 		$this->returnMethod = $returnMethod;
+		return $this;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		return $this->version;
+	}
+
+
+
+	/**
+	 * @param string $version
+	 * @return Configuration
+	 */
+	public function setVersion($version)
+	{
+		if (!in_array($version, [self::VERSION_1_5, self::VERSION_1_6], TRUE)) {
+			throw new InvalidArgumentException('Only 1.5 and 1.6 eAPI versions are supported');
+		}
+
+		$this->version = $version;
 		return $this;
 	}
 

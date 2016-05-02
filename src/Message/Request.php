@@ -180,6 +180,28 @@ class Request
 	 * @param array $data
 	 * @return Request
 	 */
+	public static function paymentOneclickInit(array $data)
+	{
+		return new static(self::POST, 'payment/oneclick/init', $data);
+	}
+
+
+
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
+	public static function paymentOneclickStart(array $data)
+	{
+		return new static(self::POST, 'payment/oneclick/start', $data);
+	}
+
+
+
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
 	public static function customerInfo(array $data)
 	{
 		return new static(self::GET, 'customer/info/:merchantId/:customerId/:dttm/:signature', $data);

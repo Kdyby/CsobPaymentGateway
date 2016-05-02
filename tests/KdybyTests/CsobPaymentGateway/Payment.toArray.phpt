@@ -99,6 +99,47 @@ class PaymentToArrayTest extends Tester\TestCase
 
 
 
+	public function testPaymentWithTtlSec()
+	{
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
+
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
+
+		$payment->setTtlSec(600);
+
+		$data = $payment->toArray();
+		Assert::true(isset($data['ttlSec']));
+		Assert::same(600, $data['ttlSec']);
+	}
+
+
+
+	public function testPaymentWithLogoAndColorSchemeVersion()
+	{
+		$payment = new Payment('A1029DTmM7', 15000001);
+		$payment->setDttm(new \DateTime('2015-11-11 12:00:00'));
+		$payment->setDescription('Test payment');
+		$payment->setReturnUrl('https://example.com/process-payment-response');
+
+		$payment->addCartItem('Test item 1', 4200, 1);
+		$payment->addCartItem('Test item 2', 15800, 2);
+
+		$payment->setLogoVersion(1);
+		$payment->setColorSchemeVersion(2);
+
+		$data = $payment->toArray();
+		Assert::true(isset($data['logoVersion']));
+		Assert::same(1, $data['logoVersion']);
+		Assert::true(isset($data['colorSchemeVersion']));
+		Assert::same(2, $data['colorSchemeVersion']);
+	}
+
+
+
 	public function testEmptyCart()
 	{
 		$payment = new Payment('A1029DTmM7', 15000001);

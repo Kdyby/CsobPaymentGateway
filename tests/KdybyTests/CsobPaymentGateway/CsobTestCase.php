@@ -19,13 +19,18 @@ class CsobTestCase extends Tester\TestCase
 	 */
 	protected $client;
 
+	/**
+	 * @var Configuration
+	 */
+	protected $configuration;
+
 
 
 	protected function setUp()
 	{
 		parent::setUp();
 		$this->client = new Client(
-			new Configuration('A1029DTmM7', 'Test shop'),
+			$this->configuration = new Configuration('A1029DTmM7', 'Test shop'),
 			$signature = \Mockery::mock(Signature::class, [
 				new PrivateKey(__DIR__ . '/../../../examples/keys/rsa_A1029DTmM7.key', NULL),
 				new PublicKey(Configuration::getCsobSandboxCertPath())

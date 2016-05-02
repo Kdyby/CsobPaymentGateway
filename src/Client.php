@@ -237,6 +237,26 @@ class Client
 
 
 	/**
+	 * @return bool
+	 */
+	public function isRecurrentPaymentSupported()
+	{
+		return $this->config->getVersion() === Configuration::VERSION_1_5;
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isOneclickPaymentSupported()
+	{
+		return !$this->isRecurrentPaymentSupported();
+	}
+
+
+
+	/**
 	 * @param Payment $payment
 	 * @return Message\Response
 	 */
@@ -246,10 +266,57 @@ class Client
 			throw new InvalidArgumentException('The origPayId is required for recurrent payment.');
 		}
 
+		if (!$this->isRecurrentPaymentSupported()) {
+			throw new NotSupportedException('payment/recurrent is not supported in currently used eAPI version');
+		}
+
 		$data = $payment->toArray();
 		$data['signature'] = $this->signature->signPayment($data);
 
 		return $this->processRequest(Message\Request::paymentRecurrent($data));
+	}
+
+
+
+	/**
+	 * @param Payment $payment
+	 * @return Message\Response
+	 */
+	public function paymentOneclickInit(Payment $payment)
+	{
+		if (!$payment->getOriginalPayId()) {
+			throw new InvalidArgumentException('The origPayId is required for oneclick payment.');
+		}
+
+		if (!$this->isOneclickPaymentSupported()) {
+			throw new NotSupportedException('payment/oneclick is not supported in currently used eAPI version');
+		}
+
+		$data = $payment->toArray();
+		$data['signature'] = $this->signature->signPayment($data);
+
+		return $this->processRequest(Message\Request::paymentOneclickInit($data));
+	}
+
+
+
+	/**
+	 * @param string $paymentId
+	 * @return Message\Response
+	 */
+	public function paymentOneclickStart($paymentId)
+	{
+		if (!$this->isOneclickPaymentSupported()) {
+			throw new NotSupportedException('payment/oneclick is not supported in currently used eAPI version');
+		}
+
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'payId' => $paymentId,
+			'dttm' => $this->formatDatetime(),
+		];
+
+		return $this->processRequest(Message\Request::paymentOneclickStart($data));
 	}
 
 
@@ -468,12 +535,12 @@ class Client
 	{
 		$endpoint = preg_replace_callback('~\\:(?P<name>[a-z0-9]+)~i', function ($m) use ($data) {
 			if (empty($data[$m['name']])) {
-				throw new InvalidArgumentException(sprintF('Missing key %s for the assembly of url', $m['name']));
+				throw new InvalidArgumentException(sprintf('Missing key %s for the assembly of url', $m['name']));
 			}
 			return urlencode($data[$m['name']]);
 		}, $endpoint);
 
-		return $this->config->getUrl() . '/' . $endpoint;
+		return $this->config->buildUrl() . '/' . $endpoint;
 	}
 
 

@@ -34,6 +34,7 @@ class Payment
 
 	const OPERATION_PAYMENT = 'payment';
 	const OPERATION_PAYMENT_RECURRENT = 'recurrentPayment';
+	const OPERATION_PAYMENT_ONECLICK = 'oneclickPayment';
 
 	const PAY_METHOD_CARD = 'card';
 
@@ -167,6 +168,32 @@ class Payment
 	 */
 	private $language = self::LANGUAGE_CZ;
 
+	/**
+	 * Nastavení životnosti transakce, v sekundách, min. povolená hodnota 300, max. povolená
+	 * hodnota 1800 (5-30 min)
+	 *
+	 * @var int
+	 */
+	private $ttlSec;
+
+	/**
+	 * Verze schváleného loga obchodníka, které se pro danou transakci zobrazí. Pokud se bude jednat
+	 * o dosud neschválené logo, použije se aktivní logo obchodníka, pokud není, defaultní logo
+	 * platební brány
+	 *
+	 * @var int
+	 */
+	private $logoVersion;
+
+	/**
+	 * Verze schváleného barevného schématu obchodníka, které se pro danou transakci zobrazí. Pokud se
+	 * bude jednat o dosud neschválené barevné schéma, zobrazí se aktivní barevné schéma obchodníka,
+	 * pokud není, zobrazí se defaultní barevné schéma platební brány
+	 *
+	 * @var int
+	 */
+	private $colorSchemeVersion;
+
 
 
 	public function __construct($merchantId, $orderNo = NULL, $customerId = NULL)
@@ -285,7 +312,7 @@ class Payment
 	 */
 	public function setPayOperation($payOperation)
 	{
-		if (!in_array($payOperation, [self::OPERATION_PAYMENT, self::OPERATION_PAYMENT_RECURRENT], TRUE)) {
+		if (!in_array($payOperation, [self::OPERATION_PAYMENT, self::OPERATION_PAYMENT_RECURRENT, self::OPERATION_PAYMENT_ONECLICK], TRUE)) {
 			throw new InvalidArgumentException('Only Payment::OPERATION_* constants are allowed');
 		}
 
@@ -402,6 +429,46 @@ class Payment
 		}
 
 		$this->language = $language;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param int $ttlSec
+	 * @return Payment
+	 */
+	public function setTtlSec($ttlSec)
+	{
+		if ($ttlSec < 300 || $ttlSec > 1800) {
+			throw new InvalidArgumentException('The TTL has to be a numeric value between 300 and 1800');
+		}
+
+		$this->ttlSec = $ttlSec;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param int $logoVersion
+	 * @return Payment
+	 */
+	public function setLogoVersion($logoVersion)
+	{
+		$this->logoVersion = $logoVersion;
+		return $this;
+	}
+
+
+
+	/**
+	 * @param int $colorSchemeVersion
+	 * @return Payment
+	 */
+	public function setColorSchemeVersion($colorSchemeVersion)
+	{
+		$this->colorSchemeVersion = $colorSchemeVersion;
 		return $this;
 	}
 
@@ -551,6 +618,18 @@ class Payment
 		}
 
 		$data['language'] = $this->language;
+
+		if ($this->ttlSec !== NULL) {
+			$data['ttlSec'] = $this->ttlSec;
+		}
+
+		if ($this->logoVersion !== NULL) {
+			$data['logoVersion'] = $this->logoVersion;
+		}
+
+		if ($this->colorSchemeVersion !== NULL) {
+			$data['colorSchemeVersion'] = $this->colorSchemeVersion;
+		}
 
 		return $data;
 	}
