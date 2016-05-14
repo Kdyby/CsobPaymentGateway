@@ -59,6 +59,11 @@ class Configuration
 	 */
 	private $returnMethod = Message\Request::POST;
 
+	/**
+	 * @var bool
+	 */
+	private $checkoutEnabled = FALSE;
+
 
 
 	/**
@@ -168,6 +173,28 @@ class Configuration
 		}
 
 		$this->returnMethod = $returnMethod;
+		return $this;
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isCheckoutEnabled()
+	{
+		return $this->checkoutEnabled;
+	}
+
+
+
+	/**
+	 * @param bool $checkoutEnabled
+	 * @return Configuration
+	 */
+	public function setCheckoutEnabled($checkoutEnabled)
+	{
+		$this->checkoutEnabled = $checkoutEnabled;
 		return $this;
 	}
 

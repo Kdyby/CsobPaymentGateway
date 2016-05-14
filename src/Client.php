@@ -148,6 +148,56 @@ class Client
 
 
 	/**
+	 * @return bool
+	 */
+	public function isPaymentCheckoutEnabled()
+	{
+		return $this->config->isCheckoutEnabled();
+	}
+
+
+
+	/**
+	 * RedirectResponse factory for payment/checkout
+	 *
+	 * @param string $paymentId
+	 * @param string|NULL $returnCheckoutUrl
+	 * @return Message\RedirectResponse
+	 */
+	public function paymentCheckout($paymentId, $returnCheckoutUrl = NULL)
+	{
+		if (!$this->isPaymentCheckoutEnabled()) {
+			throw new NotSupportedException('payment/checkout is not enabled; enable it in your config');
+		}
+
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'payId' => $paymentId,
+			'dttm' => $this->formatDatetime(),
+		];
+
+		if ($returnCheckoutUrl !== NULL) {
+			$data['returnCheckoutUrl'] = $returnCheckoutUrl;
+		}
+
+		$request = Message\Request::paymentCheckout($data);
+
+		if ($this->logger) {
+			$this->logger->info($request->getEndpointName(), ['request' => $request->toArray()]);
+		}
+
+		foreach ($this->onRequest as $callback) {
+			call_user_func($callback, $request);
+		}
+
+		$data['signature'] = $this->signature->simpleSign($data);
+
+		return new Message\RedirectResponse($this->buildUrl($request->getEndpoint(), $data));
+	}
+
+
+
+	/**
 	 * @param string $paymentId
 	 * @return Message\Response
 	 */

@@ -125,6 +125,21 @@ class Request
 	 * @param array $data
 	 * @return Request
 	 */
+	public static function paymentCheckout(array $data)
+	{
+		$endpoint = isset($data['returnCheckoutUrl'])
+			? 'payment/checkout/:merchantId/:payId/:dttm/:returnCheckoutUrl/:signature'
+			: 'payment/checkout/:merchantId/:payId/:dttm/:signature';
+
+		return new static(self::GET, $endpoint, $data);
+	}
+
+
+
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
 	public static function paymentStatus(array $data)
 	{
 		return new static(self::GET, 'payment/status/:merchantId/:payId/:dttm/:signature', $data);
