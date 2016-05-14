@@ -14,6 +14,7 @@ namespace Kdyby\CsobPaymentGateway\Message;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  */
 class Request
 {

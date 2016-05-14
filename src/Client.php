@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  */
 class Client
 {
