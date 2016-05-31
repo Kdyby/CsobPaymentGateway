@@ -207,4 +207,21 @@ class Request
 		return new static(self::GET, 'customer/info/:merchantId/:customerId/:dttm/:signature', $data);
 	}
 
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
+	public static function echoGET(array $data)
+	{
+		return new static(self::GET, 'echo/:merchantId/:dttm/:signature', $data);
+	}
+
+	/**
+	 * @param array $data
+	 * @return Request
+	 */
+	public static function echoPOST(array $data)
+	{
+		return new static(self::POST, 'echo', $data);
+	}
 }

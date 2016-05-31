@@ -335,7 +335,32 @@ class Client
 
 		return $this->processRequest(Message\Request::customerInfo($data));
 	}
+	
+	/**
+	 * @return Message\Response
+	 */
+	public function echoGET()
+	{
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'dttm' => $this->formatDatetime(),
+		];
 
+		return $this->processRequest(Message\Request::echoGET($data));
+	}
+
+	/**
+	 * @return Message\Response
+	 */
+	public function echoPOST()
+	{
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'dttm' => $this->formatDatetime(),
+		];
+
+		return $this->processRequest(Message\Request::echoPOST($data));
+	}
 
 
 	/**

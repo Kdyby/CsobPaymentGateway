@@ -71,9 +71,15 @@ class HttpClientMock implements IHttpClient
 	{
 		$parsedUrl = parse_url($url);
 		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-
-		list(,,, $resource, $action) = explode('/', $path);
-		$endpoint = $resource . '/' . $action;
+		if(substr_count($path, '/') === 3)
+		{
+			list(,,,$resource) = explode('/', $path);
+			$action = null;
+			$endpoint = $resource;
+		} else {
+			list(,,,$resource, $action) = explode('/', $path);
+			$endpoint = $resource . '/' . $action;
+		}
 		$decodedBody = json_decode($body, TRUE);
 
 		switch ($endpoint) {
@@ -104,6 +110,13 @@ class HttpClientMock implements IHttpClient
 			case 'customer/info':
 				list(,,,,, $merchantId, $customerId) = explode('/', $path);
 				return __DIR__ . '/api-data/customer_' . $merchantId . '_' . $customerId . '.json';
+
+			case 'echo':
+				$decodedBody = json_decode($body, TRUE);
+				return __DIR__ . '/api-data/echo_' . $decodedBody['merchantId'] . '.json';
+			case 'echo/A1029DTmM7':
+				list(,,,,$merchantId) = explode('/', $path);
+				return __DIR__ . '/api-data/echo_' . $merchantId . '.json';
 
 			case 'payment/400':
 			case 'payment/403':
