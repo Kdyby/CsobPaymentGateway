@@ -1,0 +1,38 @@
+{
+    "status": 200,
+    "headers": {
+        "Server": [
+            "nginx"
+        ],
+        "Date": [
+            "Fri, 13 Nov 2015 11:50:37 GMT"
+        ],
+        "Content-Type": [
+            "application\/json;charset=UTF-8"
+        ],
+        "Transfer-Encoding": [
+            "chunked"
+        ],
+        "Connection": [
+            "keep-alive"
+        ],
+        "Cache-Control": [
+            "no-cache, no-store, must-revalidate"
+        ],
+        "Expires": [
+            "0"
+        ],
+        "Pragma": [
+            "no-cache"
+        ],
+        "Set-Cookie": [
+            "BIGipServerasors_iplatebnibrana.csob.cz_6443_pool=+tnOilawObL9RlJztSMfRlE092AOeKaGfQuRH2Laj9hCS39OPIG1\/ybPSIX0D9mSErawXEcT\/em82RcAAAAB;secure; path=\/"
+        ]
+    },
+    "body": {
+        "dttm":"20140425131559",
+        "resultCode": 0,
+        "resultMessage":"OK",
+        "signature":"base64-encoded-response-signature"
+    }
+}
