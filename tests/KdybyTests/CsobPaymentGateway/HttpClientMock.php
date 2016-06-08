@@ -5,8 +5,6 @@ namespace KdybyTests\CsobPaymentGateway;
 use GuzzleHttp\Psr7\Response;
 use Kdyby\CsobPaymentGateway\Http\GuzzleClient;
 use Kdyby\CsobPaymentGateway\IHttpClient;
-use Nette\Utils\Json;
-use Nette\Utils\JsonException;
 use Psr\Http\Message\ResponseInterface;
 
 
@@ -72,8 +70,11 @@ class HttpClientMock implements IHttpClient
 		$parsedUrl = parse_url($url);
 		$path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
 
-		list(,,, $resource, $action) = explode('/', $path);
-		$endpoint = $resource . '/' . $action;
+		$pieces = explode('/', $path);
+		$resource = $pieces[3];
+		$action = isset($pieces[4]) ? $pieces[4] : NULL;
+		$endpoint = $resource . ($action ? '/' . $action : '');
+
 		$decodedBody = json_decode($body, TRUE);
 
 		switch ($endpoint) {
@@ -84,7 +85,7 @@ class HttpClientMock implements IHttpClient
 				return __DIR__ . '/api-data/recurrent_' . $decodedBody['merchantId'] . '_' . $decodedBody['origPayId'] . '.json';
 
 			case 'payment/oneclick':
-				if (explode('/', $path)[5] === 'init') {
+				if ($pieces[5] === 'init') {
 					return __DIR__ . '/api-data/oneclickInit_' . $decodedBody['merchantId'] . '_' . $decodedBody['origPayId'] . '.json';
 				} else {
 					return __DIR__ . '/api-data/oneclickStart_' . $decodedBody['merchantId'] . '_' . $decodedBody['payId'] . '.json';
@@ -93,17 +94,13 @@ class HttpClientMock implements IHttpClient
 			case 'payment/close':
 			case 'payment/reverse':
 			case 'payment/refund':
-				$decodedBody = json_decode($body, TRUE);
 				return __DIR__ . '/api-data/' . $action . '_' . $decodedBody['merchantId'] . '_' . $decodedBody['payId'] . '.json';
 
-			case 'payment/process':
-			case 'payment/status':
-				list(,,,,, $merchantId, $payId) = explode('/', $path);
-				return __DIR__ . '/api-data/' . $action . '_' . $merchantId . '_' . $payId . '.json';
+			case 'payment/status': // payment/status/:merchantId/:payId
+				return __DIR__ . '/api-data/' . $action . '_' . $pieces[5] . '_' . $pieces[6] . '.json';
 
-			case 'customer/info':
-				list(,,,,, $merchantId, $customerId) = explode('/', $path);
-				return __DIR__ . '/api-data/customer_' . $merchantId . '_' . $customerId . '.json';
+			case 'customer/info': // customer/info/:merchantId/:customerId
+				return __DIR__ . '/api-data/customer_' . $pieces[5] . '_' . $pieces[6] . '.json';
 
 			case 'payment/400':
 			case 'payment/403':
