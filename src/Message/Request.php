@@ -128,10 +128,21 @@ class Request
 	 */
 	public static function paymentCheckout(array $data)
 	{
-		$endpoint = isset($data['returnCheckoutUrl'])
-			? 'payment/checkout/:merchantId/:payId/:dttm/:returnCheckoutUrl/:signature'
-			: 'payment/checkout/:merchantId/:payId/:dttm/:signature';
+		$endpoint = 'payment/checkout/:merchantId/:payId/:dttm';
 
+		if (isset($data['oneclickPaymentCheckbox'])) {
+			$endpoint .= '/:oneclickPaymentCheckbox';
+		}
+
+		if (isset($data['displayOmnibox'])) {
+			$endpoint .= '/:displayOmnibox';
+		}
+
+		if (isset($data['returnCheckoutUrl'])) {
+			$endpoint .= '/:returnCheckoutUrl';
+		}
+
+		$endpoint .= '/:signature';
 		return new static(self::GET, $endpoint, $data);
 	}
 

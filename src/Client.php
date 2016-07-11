@@ -161,11 +161,10 @@ class Client
 	/**
 	 * RedirectResponse factory for payment/checkout
 	 *
-	 * @param string $paymentId
-	 * @param string|NULL $returnCheckoutUrl
+	 * @param CheckoutRequest $request
 	 * @return Message\RedirectResponse
 	 */
-	public function paymentCheckout($paymentId, $returnCheckoutUrl = NULL)
+	public function paymentCheckout(CheckoutRequest $request)
 	{
 		if (!$this->isPaymentCheckoutEnabled()) {
 			throw new NotSupportedException('payment/checkout is not enabled; enable it in your config');
@@ -173,12 +172,17 @@ class Client
 
 		$data = [
 			'merchantId' => $this->config->getMerchantId(),
-			'payId' => $paymentId,
+			'payId' => $request->getPaymentId(),
 			'dttm' => $this->formatDatetime(),
 		];
 
-		if ($returnCheckoutUrl !== NULL) {
-			$data['returnCheckoutUrl'] = $returnCheckoutUrl;
+		if (version_compare($this->config->getVersion(), '1.6', '>=')) {
+			$data['oneclickPaymentCheckbox'] = $request->getOneclickPaymentCheckbox();
+			$data['displayOmnibox'] = $request->getDisplayOmnibox() ? 'true' : 'false';
+		}
+
+		if ($request->getReturnCheckoutUrl() !== NULL) {
+			$data['returnCheckoutUrl'] = $request->getReturnCheckoutUrl();
 		}
 
 		$request = Message\Request::paymentCheckout($data);
@@ -440,6 +444,39 @@ class Client
 	}
 
 
+	/**
+	 * @param array $data
+	 * @return Message\Response
+	 */
+	public function returnCheckout(array $data)
+	{
+		if (empty($data)) {
+			throw new InvalidArgumentException('Expected at least partial response from gateway, nothing was given.');
+		}
+
+		$data += array_fill_keys([
+			'payId',
+			'dttm',
+			'signature',
+		], NULL);
+
+		$response = Message\Response::createFromArray($data);
+
+		if ($this->logger) {
+			$logParams = $data;
+			unset($logParams['signature']);
+			$this->logger->info('payment/checkout', ['response' => $logParams]);
+		}
+
+		if (empty($data['signature'])) {
+			throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', json_encode($data)));
+		}
+
+		$response->verify($this->signature);
+		return $response;
+	}
+
+
 
 	/**
 	 * @param Message\Request $request
@@ -585,7 +622,7 @@ class Client
 	protected function buildUrl($endpoint, array $data)
 	{
 		$endpoint = preg_replace_callback('~\\:(?P<name>[a-z0-9]+)~i', function ($m) use ($data) {
-			if (empty($data[$m['name']])) {
+			if (!isset($data[$m['name']]) || $data[$m['name']] === '') {
 				throw new InvalidArgumentException(sprintf('Missing key %s for the assembly of url', $m['name']));
 			}
 			return urlencode($data[$m['name']]);
