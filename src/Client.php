@@ -10,6 +10,7 @@
 
 namespace Kdyby\CsobPaymentGateway;
 
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\Message\Signature;
 use Psr\Log\LoggerInterface;
 
@@ -359,7 +360,7 @@ class Client
 			'signature',
 		], NULL);
 
-		$response = Message\Response::createFromArray($data);
+		$response = Message\PaymentResponse::createFromArray($data);
 
 		// todo: call onResponse?
 
@@ -427,7 +428,8 @@ class Client
 				throw new ApiException(sprintf('The "resultCode" key is missing in response %s', $responseBody), $httpResponse->getStatusCode());
 			}
 
-			$response = new Message\Response($decoded, $request);
+			$responseClass = $request->getResponseClass();
+			$response = new $responseClass($decoded, $request);
 
 			if ($decoded['resultCode'] === PaymentException::INTERNAL_ERROR) {
 				throw InternalErrorException::fromResponse($decoded, $response);
@@ -456,7 +458,9 @@ class Client
 					throw OperationNotAllowedException::fromResponse($decoded, $response);
 			}
 
-			$this->handleInvalidPaymentStatus($response);
+			if ($response instanceof PaymentResponse) {
+				$this->handleInvalidPaymentStatus($response);
+			}
 
 			foreach ($this->onResponse as $callback) {
 				call_user_func($callback, $request, $response);

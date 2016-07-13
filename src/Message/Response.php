@@ -1,34 +1,28 @@
 <?php
 
-/**
- * This file is part of the Kdyby (http://www.kdyby.org)
- *
- * Copyright (c) 2008 Filip Procházka (filip@prochazka.su)
- *
- * For the full copyright and license information, please view the file license.txt that was distributed with this source code.
- */
-
 namespace Kdyby\CsobPaymentGateway\Message;
 
+use Kdyby\CsobPaymentGateway\Message\Extensions\ExtensionResponseProvider;
+use Kdyby\CsobPaymentGateway\Message\Extensions\IExtensionResponse;
 use Kdyby\CsobPaymentGateway\SigningException;
 
 
 
 /**
- * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  */
-class Response
+abstract class Response
 {
 
 	/**
 	 * @var array
 	 */
-	private $data;
+	protected $data;
 
 	/**
-	 * @var Request
+	 * @var Request|NULL
 	 */
-	private $request;
+	protected $request;
 
 
 
@@ -41,7 +35,7 @@ class Response
 
 
 	/**
-	 * @return Request
+	 * @return Request|NULL
 	 */
 	public function getRequest()
 	{
@@ -51,81 +45,23 @@ class Response
 
 
 	/**
-	 * @return string
+	 * @return IExtensionResponse[]
 	 */
-	public function getPayId()
+	public function getExtensions()
 	{
-		return array_key_exists('payId', $this->data) ? $this->data['payId'] : NULL;
-	}
+		$extensions = array_key_exists('extensions', $this->data) ? $this->data['extensions'] : [];
+		$responses = [];
 
+		foreach ($extensions as $extension) {
+			$extensionName = array_key_exists('extension', $extension) ? $extension['extension'] : NULL;
+			$responseClass = ExtensionResponseProvider::getResponseClass($extensionName);
 
+			if ($responseClass !== NULL) {
+				$responses[$extensionName] = new $responseClass($extension);
+			}
+		}
 
-	/**
-	 * @return \DateTime
-	 */
-	public function getDateTime()
-	{
-		return \DateTime::createFromFormat('YmdHis', $this->data['dttm']);
-	}
-
-
-
-	/**
-	 * @return int
-	 */
-	public function getResultCode()
-	{
-		return array_key_exists('resultCode', $this->data) ? (int) $this->data['resultCode'] : NULL;
-	}
-
-
-
-	/**
-	 * @return string
-	 */
-	public function getResultMessage()
-	{
-		return array_key_exists('resultMessage', $this->data) ? $this->data['resultMessage'] : NULL;
-	}
-
-
-
-	/**
-	 * @return int
-	 */
-	public function getPaymentStatus()
-	{
-		return array_key_exists('paymentStatus', $this->data) ? (int) $this->data['paymentStatus'] : NULL;
-	}
-
-
-
-	/**
-	 * @return string|NULL
-	 */
-	public function getAuthCode()
-	{
-		return array_key_exists('authCode', $this->data) ? (string) $this->data['authCode'] : NULL;
-	}
-
-
-
-	/**
-	 * @return string|NULL
-	 */
-	public function getCardToken()
-	{
-		return array_key_exists('cardToken', $this->data) ? $this->data['cardToken'] : NULL;
-	}
-
-
-
-	/**
-	 * @return string|NULL
-	 */
-	public function getMerchantData()
-	{
-		return array_key_exists('merchantData', $this->data) ? base64_decode($this->data['merchantData']) : NULL;
+		return $responses;
 	}
 
 
@@ -133,11 +69,11 @@ class Response
 	/**
 	 * @param Signature $signature
 	 * @throws SigningException
-	 * @return Response
+	 * @return static
 	 */
 	public function verify(Signature $signature)
 	{
-		if ($signature->verifyResponse($this->data, $this->data['signature']) !== TRUE) {
+		if ($signature->verifyResponse($this->data, $this->data['signature'], $this->getSignaturePriorities()) !== TRUE) {
 			throw SigningException::fromResponse($this);
 		}
 
@@ -149,28 +85,13 @@ class Response
 	/**
 	 * @return array
 	 */
-	public function toArray()
-	{
-		return [
-			'payId' => $this->getPayId(),
-			'dttm' => $this->getDateTime(),
-			'resultCode' => $this->getResultCode(),
-			'resultMessage' => $this->getResultMessage(),
-			'paymentStatus' => $this->getPaymentStatus(),
-			'authCode' => $this->getAuthCode(),
-			'merchantData' => $this->getMerchantData(),
-		] + $this->data;
-	}
+	abstract protected function getSignaturePriorities();
 
 
 
 	/**
-	 * @param array $decoded
-	 * @return Response
+	 * @return array
 	 */
-	public static function createFromArray(array $decoded)
-	{
-		return new static($decoded, NULL);
-	}
+	abstract public function toArray();
 
 }
