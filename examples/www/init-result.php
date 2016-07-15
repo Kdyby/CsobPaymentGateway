@@ -54,6 +54,7 @@ echo formatHttpMessage($lastHttpResponse);
 <?php if ($payId): ?>
 	<h2>actions</h2>
 	<a href="<?=htmlspecialchars($client->paymentProcess($payId), ENT_QUOTES);?>">payment/process</a><br/>
+	<a href="checkout.php?payId=<?=htmlspecialchars($payId, ENT_QUOTES);?>">payment/checkout</a><br/>
 	<a href="payment.php?action=status&pay_id=<?=htmlspecialchars($payId, ENT_QUOTES);?>">payment/status</a><br/>
 	<a href="payment.php?action=close&pay_id=<?=htmlspecialchars($payId, ENT_QUOTES);?>">payment/close</a><br/>
 	<a href="payment.php?action=reverse&pay_id=<?=htmlspecialchars($payId, ENT_QUOTES);?>">payment/reverse</a><br/>
