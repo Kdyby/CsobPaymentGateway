@@ -18,10 +18,10 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @author Jiří Pudil <me@jiripudil.cz>
  */
-class ClientReturnCheckoutTest extends CsobTestCase
+class ClientReceiveCheckoutTest extends CsobTestCase
 {
 
-	public function testReturnCheckout()
+	public function testReceiveCheckout()
 	{
 		$data = [
 			'payId' => 'fb425174783f9AK',
@@ -29,7 +29,7 @@ class ClientReturnCheckoutTest extends CsobTestCase
 			'signature' => 'signature',
 		];
 
-		$returnResponse = $this->client->returnCheckout($data);
+		$returnResponse = $this->client->receiveCheckout($data);
 		Assert::same('fb425174783f9AK', $returnResponse->getPayId());
 	}
 
@@ -37,4 +37,4 @@ class ClientReturnCheckoutTest extends CsobTestCase
 
 
 
-\run(new ClientReturnCheckoutTest());
+\run(new ClientReceiveCheckoutTest());

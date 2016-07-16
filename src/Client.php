@@ -448,7 +448,7 @@ class Client
 	 * @param array $data
 	 * @return Message\Response
 	 */
-	public function returnCheckout(array $data)
+	public function receiveCheckout(array $data)
 	{
 		if (empty($data)) {
 			throw new InvalidArgumentException('Expected at least partial response from gateway, nothing was given.');
