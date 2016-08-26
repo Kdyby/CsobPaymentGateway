@@ -11,6 +11,7 @@ namespace KdybyTests\CsobPaymentGateway;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
 use Kdyby\CsobPaymentGateway\InvalidParameterException;
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
 use Kdyby\CsobPaymentGateway\Message\Signature;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -30,12 +31,14 @@ class ClientPaymentRefundTest extends CsobTestCase
 	public function testPaymentRefund()
 	{
 		$response = $this->client->paymentRefund('eb54f88be59c2AK');
+		Assert::type(PaymentResponse::class, $response);
 		Assert::same('eb54f88be59c2AK', $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());
 		Assert::same(Payment::STATUS_CLEARED, $response->getPaymentStatus()); // refund is async
 
 		$response = $this->client->paymentStatus('eb54f88be59c2AK');
+		Assert::type(PaymentResponse::class, $response);
 		Assert::same('eb54f88be59c2AK', $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());
@@ -47,6 +50,7 @@ class ClientPaymentRefundTest extends CsobTestCase
 	public function testPartialRefund()
 	{
 		$response = $this->client->paymentRefund('ee4c7266dca71AK', 50 * 100);
+		Assert::type(PaymentResponse::class, $response);
 		Assert::same('ee4c7266dca71AK', $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());

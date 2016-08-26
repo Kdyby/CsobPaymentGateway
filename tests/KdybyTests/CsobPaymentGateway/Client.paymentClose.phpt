@@ -11,6 +11,7 @@ namespace KdybyTests\CsobPaymentGateway;
 use Kdyby\CsobPaymentGateway\Client;
 use Kdyby\CsobPaymentGateway\Configuration;
 use Kdyby\CsobPaymentGateway\InvalidParameterException;
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\Message\RedirectResponse;
 use Kdyby\CsobPaymentGateway\Message\Signature;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -30,6 +31,7 @@ class ClientPaymentCloseTest extends CsobTestCase
 	public function testPaymentClose()
 	{
 		$response = $this->client->paymentClose('ee4c7266dca71AK');
+		Assert::type(PaymentResponse::class, $response);
 		Assert::same('ee4c7266dca71AK', $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());
@@ -41,6 +43,7 @@ class ClientPaymentCloseTest extends CsobTestCase
 	public function testPartialClose()
 	{
 		$response = $this->client->paymentClose('e1ea517e561e4AK', 200 * 100);
+		Assert::type(PaymentResponse::class, $response);
 		Assert::same('e1ea517e561e4AK', $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());

@@ -10,6 +10,7 @@ namespace KdybyTests\CsobPaymentGateway;
 
 use Kdyby\CsobPaymentGateway\Configuration;
 use Kdyby\CsobPaymentGateway\InvalidParameterException;
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\NotSupportedException;
 use Kdyby\CsobPaymentGateway\OperationNotAllowedException;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -38,6 +39,7 @@ class ClientPaymentRecurrentTest extends CsobTestCase
 			->addCartItem('Test item 2', 158 * 100, 2);
 
 		$response = $this->client->paymentRecurrent($payment);
+		Assert::type(PaymentResponse::class, $response);
 		Assert::notSame(NULL, $response->getPayId());
 		Assert::same(0, $response->getResultCode());
 		Assert::same('OK', $response->getResultMessage());
