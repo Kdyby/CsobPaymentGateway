@@ -4,6 +4,7 @@ Kdyby/CsobPaymentGateway
 [![Build Status](https://travis-ci.org/Kdyby/CsobPaymentGateway.svg?branch=master)](https://travis-ci.org/Kdyby/CsobPaymentGateway)
 [![Downloads this Month](https://img.shields.io/packagist/dm/kdyby/csob-payment-gateway.svg)](https://packagist.org/packages/kdyby/csob-payment-gateway)
 [![Latest stable](https://img.shields.io/packagist/v/kdyby/csob-payment-gateway.svg)](https://packagist.org/packages/kdyby/csob-payment-gateway)
+[![Coverage Status](https://coveralls.io/repos/github/Kdyby/CsobPaymentGateway/badge.svg?branch=master)](https://coveralls.io/github/Kdyby/CsobPaymentGateway?branch=master)
 [![Join the chat at https://gitter.im/Kdyby/Help](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Kdyby/Help)
 
 
