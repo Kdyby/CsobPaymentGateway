@@ -31,6 +31,8 @@ class Payment
 	const CURRENCY_EUR = 'EUR';
 	const CURRENCY_USD = 'USD';
 	const CURRENCY_GBP = 'GBP';
+	const CURRENCY_HUF = 'HUF';
+	const CURRENCY_PLN = 'PLN';
 
 	const OPERATION_PAYMENT = 'payment';
 	const OPERATION_PAYMENT_RECURRENT = 'recurrentPayment';
@@ -284,7 +286,7 @@ class Payment
 	 */
 	public function setCurrency($currency)
 	{
-		if (!in_array($currency, [self::CURRENCY_CZK, self::CURRENCY_EUR, self::CURRENCY_GBP, self::CURRENCY_USD], TRUE)) {
+		if (!in_array($currency, [self::CURRENCY_CZK, self::CURRENCY_EUR, self::CURRENCY_GBP, self::CURRENCY_USD, self::CURRENCY_HUF, self::CURRENCY_PLN], TRUE)) {
 			throw new InvalidArgumentException('Only Payment::CURRENCY_* constants are allowed');
 		}
 
