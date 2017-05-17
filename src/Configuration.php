@@ -15,6 +15,7 @@ namespace Kdyby\CsobPaymentGateway;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  * @see https://iplatebnibrana.csob.cz/keygen/
  */
 class Configuration
@@ -58,6 +59,11 @@ class Configuration
 	 * @var string
 	 */
 	private $returnMethod = Message\Request::POST;
+
+	/**
+	 * @var bool
+	 */
+	private $checkoutEnabled = FALSE;
 
 
 
@@ -168,6 +174,28 @@ class Configuration
 		}
 
 		$this->returnMethod = $returnMethod;
+		return $this;
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isCheckoutEnabled()
+	{
+		return $this->checkoutEnabled;
+	}
+
+
+
+	/**
+	 * @param bool $checkoutEnabled
+	 * @return Configuration
+	 */
+	public function setCheckoutEnabled($checkoutEnabled)
+	{
+		$this->checkoutEnabled = $checkoutEnabled;
 		return $this;
 	}
 

@@ -52,6 +52,8 @@ function formatHttpMessage(Http\Message\MessageInterface $message = NULL)
 }
 
 $config = new Configuration('A1029DTmM7', 'Shopping at ...');
+$config->setCheckoutEnabled(TRUE);
+
 $httpClient = Configuration::createDefaultHttpClient();
 $client = new Client(
 	$config,
@@ -74,4 +76,4 @@ $httpClient->onResponse[] = function ($response) use (&$lastHttpResponse) {
 	$lastHttpResponse = $response;
 };
 
-$selfUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim(dirname($_SERVER['DOCUMENT_URI']) . '/payment-return.php', '/');
+$selfUrl = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim(dirname($_SERVER['DOCUMENT_URI']), '/');

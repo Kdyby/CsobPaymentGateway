@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  */
 class Client
 {
@@ -131,6 +132,60 @@ class Client
 		];
 
 		$request = Message\Request::paymentProcess($data);
+
+		if ($this->logger) {
+			$this->logger->info($request->getEndpointName(), ['request' => $request->toArray()]);
+		}
+
+		foreach ($this->onRequest as $callback) {
+			call_user_func($callback, $request);
+		}
+
+		$data['signature'] = $this->signature->simpleSign($data);
+
+		return new Message\RedirectResponse($this->buildUrl($request->getEndpoint(), $data));
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isPaymentCheckoutEnabled()
+	{
+		return $this->config->isCheckoutEnabled();
+	}
+
+
+
+	/**
+	 * RedirectResponse factory for payment/checkout
+	 *
+	 * @param CheckoutRequest $request
+	 * @return Message\RedirectResponse
+	 */
+	public function paymentCheckout(CheckoutRequest $request)
+	{
+		if (!$this->isPaymentCheckoutEnabled()) {
+			throw new NotSupportedException('payment/checkout is not enabled; enable it in your config');
+		}
+
+		$data = [
+			'merchantId' => $this->config->getMerchantId(),
+			'payId' => $request->getPaymentId(),
+			'dttm' => $this->formatDatetime(),
+		];
+
+		if (version_compare($this->config->getVersion(), '1.6', '>=')) {
+			$data['oneclickPaymentCheckbox'] = $request->getOneclickPaymentCheckbox();
+			$data['displayOmnibox'] = $request->getDisplayOmnibox() ? 'true' : 'false';
+		}
+
+		if ($request->getReturnCheckoutUrl() !== NULL) {
+			$data['returnCheckoutUrl'] = $request->getReturnCheckoutUrl();
+		}
+
+		$request = Message\Request::paymentCheckout($data);
 
 		if ($this->logger) {
 			$this->logger->info($request->getEndpointName(), ['request' => $request->toArray()]);
@@ -389,6 +444,39 @@ class Client
 	}
 
 
+	/**
+	 * @param array $data
+	 * @return Message\Response
+	 */
+	public function receiveCheckout(array $data)
+	{
+		if (empty($data)) {
+			throw new InvalidArgumentException('Expected at least partial response from gateway, nothing was given.');
+		}
+
+		$data += array_fill_keys([
+			'payId',
+			'dttm',
+			'signature',
+		], NULL);
+
+		$response = Message\Response::createFromArray($data);
+
+		if ($this->logger) {
+			$logParams = $data;
+			unset($logParams['signature']);
+			$this->logger->info('payment/checkout', ['response' => $logParams]);
+		}
+
+		if (empty($data['signature'])) {
+			throw new ApiException(sprintf('The "signature" key is missing or empty in response %s', json_encode($data)));
+		}
+
+		$response->verify($this->signature);
+		return $response;
+	}
+
+
 
 	/**
 	 * @param Message\Request $request
@@ -534,7 +622,7 @@ class Client
 	protected function buildUrl($endpoint, array $data)
 	{
 		$endpoint = preg_replace_callback('~\\:(?P<name>[a-z0-9]+)~i', function ($m) use ($data) {
-			if (empty($data[$m['name']])) {
+			if (!isset($data[$m['name']]) || $data[$m['name']] === '') {
 				throw new InvalidArgumentException(sprintf('Missing key %s for the assembly of url', $m['name']));
 			}
 			return urlencode($data[$m['name']]);

@@ -12,6 +12,7 @@ namespace Kdyby\CsobPaymentGateway;
 
 /**
  * @author Filip Procházka <filip@prochazka.su>
+ * @author Jiří Pudil <me@jiripudil.cz>
  */
 class Payment
 {
@@ -196,6 +197,12 @@ class Payment
 	 */
 	private $colorSchemeVersion;
 
+	/**
+	 * Přiznak, zda lze při platbě dané transakce využít embedovanou platební bránu.
+	 *
+	 * @var bool
+	 */
+	private $checkoutAllowed = TRUE;
 
 
 	public function __construct($merchantId, $orderNo = NULL, $customerId = NULL)
@@ -471,6 +478,27 @@ class Payment
 	public function setColorSchemeVersion($colorSchemeVersion)
 	{
 		$this->colorSchemeVersion = $colorSchemeVersion;
+		return $this;
+	}
+
+
+
+	/**
+	 * @return bool
+	 */
+	public function isCheckoutAllowed()
+	{
+		return $this->checkoutAllowed;
+	}
+
+
+
+	/**
+	 * @return Payment
+	 */
+	public function disallowCheckout()
+	{
+		$this->checkoutAllowed = FALSE;
 		return $this;
 	}
 

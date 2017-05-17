@@ -48,7 +48,7 @@ require_once __DIR__ . '/../bootstrap.php';
 			<label for="return_url" class="col-sm-2 control-label">Return URL</label>
 
 			<div class="col-sm-7">
-				<input class="form-control" name="return_url" id="return_url" value="<?=htmlspecialchars($selfUrl, ENT_QUOTES);?>"/>
+				<input class="form-control" name="return_url" id="return_url" value="<?=htmlspecialchars($selfUrl . 'payment-return.php', ENT_QUOTES);?>"/>
 			</div>
 		</div>
 		<div class="form-group">
