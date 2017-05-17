@@ -37,13 +37,19 @@ class Request
 	 */
 	private $data;
 
+	/**
+	 * @var string
+	 */
+	private $responseClass;
 
 
-	public function __construct($method, $endpoint, array $data)
+
+	public function __construct($method, $endpoint, array $data, $responseClass = PaymentResponse::class)
 	{
 		$this->method = $method;
 		$this->endpoint = $endpoint;
 		$this->data = $data;
+		$this->responseClass = $responseClass;
 	}
 
 
@@ -85,6 +91,16 @@ class Request
 	{
 		list($name) = explode('/:', $this->endpoint, 2);
 		return $name;
+	}
+
+
+
+	/**
+	 * @return string
+	 */
+	public function getResponseClass()
+	{
+		return $this->responseClass;
 	}
 
 
@@ -204,7 +220,7 @@ class Request
 	 */
 	public static function customerInfo(array $data)
 	{
-		return new static(self::GET, 'customer/info/:merchantId/:customerId/:dttm/:signature', $data);
+		return new static(self::GET, 'customer/info/:merchantId/:customerId/:dttm/:signature', $data, CustomerResponse::class);
 	}
 
 }

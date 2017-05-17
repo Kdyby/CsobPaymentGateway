@@ -59,20 +59,6 @@ class Signature
 		'colorSchemeVersion',
 	];
 
-	/**
-	 * @var array
-	 */
-	private $responsePriorities = [
-		'payId',
-		'customerId',
-		'dttm',
-		'resultCode',
-		'resultMessage',
-		'paymentStatus',
-		'authCode',
-		'merchantData',
-	];
-
 
 
 	public function __construct(PrivateKey $privateKey, PublicKey $publicKey)
@@ -128,11 +114,12 @@ class Signature
 	/**
 	 * @param array $data
 	 * @param string $signature
+	 * @param array $signaturePriorities
 	 * @return bool
 	 */
-	public function verifyResponse(array $data, $signature)
+	public function verifyResponse(array $data, $signature, array $signaturePriorities)
 	{
-		return $this->publicKey->verify(self::arrayToSignatureString($data, $this->responsePriorities), $signature);
+		return $this->publicKey->verify(self::arrayToSignatureString($data, $signaturePriorities), $signature);
 	}
 
 

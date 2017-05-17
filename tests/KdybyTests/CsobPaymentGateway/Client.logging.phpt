@@ -103,7 +103,7 @@ class ClientLoggingTest extends CsobTestCase
 			new HttpClientMock()
 		);
 		$client->setLogger($this->logger);
-		$signature->shouldReceive('verifyResponse')->with(\Mockery::type('array'), 'signature')->andReturn(TRUE);
+		$signature->shouldReceive('verifyResponse')->with(\Mockery::type('array'), 'signature', \Mockery::type('array'))->andReturn(TRUE);
 
 		$returnData = [
 			'payId' => 'fb425174783f9AK',

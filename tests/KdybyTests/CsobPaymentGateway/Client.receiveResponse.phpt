@@ -9,6 +9,7 @@
 namespace KdybyTests\CsobPaymentGateway;
 
 use Kdyby\CsobPaymentGateway\InternalErrorException;
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\Payment;
 use Kdyby\CsobPaymentGateway\PaymentCanceledException;
 use Kdyby\CsobPaymentGateway\PaymentDeclinedException;
@@ -38,6 +39,7 @@ class ClientReceiveResponseTest extends CsobTestCase
 		];
 
 		$returnResponse = $this->client->receiveResponse($returnData);
+		Assert::type(PaymentResponse::class, $returnResponse);
 		Assert::same('fb425174783f9AK', $returnResponse->getPayId());
 		Assert::same(0, $returnResponse->getResultCode());
 		Assert::same('OK', $returnResponse->getResultMessage());
@@ -60,6 +62,7 @@ class ClientReceiveResponseTest extends CsobTestCase
 		];
 
 		$returnResponse = $this->client->receiveResponse($returnData);
+		Assert::type(PaymentResponse::class, $returnResponse);
 		Assert::same('fb425174783f9AK', $returnResponse->getPayId());
 		Assert::same(0, $returnResponse->getResultCode());
 		Assert::same('OK', $returnResponse->getResultMessage());

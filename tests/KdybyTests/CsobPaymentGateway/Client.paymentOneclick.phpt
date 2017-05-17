@@ -9,6 +9,7 @@
 namespace KdybyTests\CsobPaymentGateway;
 
 use Kdyby\CsobPaymentGateway\Configuration;
+use Kdyby\CsobPaymentGateway\Message\PaymentResponse;
 use Kdyby\CsobPaymentGateway\NotSupportedException;
 use Kdyby\CsobPaymentGateway\OperationNotAllowedException;
 use Kdyby\CsobPaymentGateway\Payment;
@@ -45,12 +46,14 @@ class ClientPaymentOneclickTest extends CsobTestCase
 			->addCartItem('Test item 2', 158 * 100, 2);
 
 		$initResponse = $this->client->paymentOneclickInit($payment);
+		Assert::type(PaymentResponse::class, $initResponse);
 		Assert::notSame(NULL, $initResponse->getPayId());
 		Assert::same(0, $initResponse->getResultCode());
 		Assert::same('OK', $initResponse->getResultMessage());
 		Assert::same(Payment::STATUS_REQUESTED, $initResponse->getPaymentStatus());
 
 		$startResponse = $this->client->paymentOneclickStart($initResponse->getPayId());
+		Assert::type(PaymentResponse::class, $startResponse);
 		Assert::same($initResponse->getPayId(), $startResponse->getPayId());
 		Assert::same(0, $startResponse->getResultCode());
 		Assert::same('OK', $startResponse->getResultMessage());

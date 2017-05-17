@@ -80,7 +80,16 @@ class SignatureTest extends Tester\TestCase
 		];
 
 		$signatureString = $this->privateKey->sign('abcdefghijklmno|20151111120002|0|OK|1|eyJmb29JZCI6IDEyMzQ1Nn0=');
-		Assert::true($this->signature->verifyResponse($data, $signatureString));
+		Assert::true($this->signature->verifyResponse($data, $signatureString, [
+			'payId',
+			'dttm',
+			'resultCode',
+			'resultMessage',
+			'paymentStatus',
+			'merchantData',
+		]));
+
+		Assert::false($this->signature->verifyResponse($data, $signatureString, ['payId']));
 	}
 
 }
